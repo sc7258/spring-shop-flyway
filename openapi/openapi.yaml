@@ -1,0 +1,272 @@
+openapi: 3.0.3
+info:
+  title: Spring Shop Flyway API
+  description: |
+    # Online Bookstore API
+    아마존과 유사한 온라인 도서 주문 및 배송 서비스 API입니다.
+
+    ## Error Codes
+    | Code | Message | Status | Description |
+    |---|---|---|---|
+    | `C001` | Invalid Input Value | 400 | 입력값이 올바르지 않습니다. |
+    | `C002` | Entity Not Found | 404 | 요청한 리소스를 찾을 수 없습니다. |
+    | `M001` | Email Already Exists | 409 | 이미 가입된 이메일입니다. |
+    | `M002` | Login Failed | 401 | 이메일 또는 비밀번호가 일치하지 않습니다. |
+    | `B001` | Out of Stock | 409 | 재고가 부족합니다. |
+    | `O001` | Order Not Found | 404 | 주문을 찾을 수 없습니다. |
+
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local Development Server
+
+paths:
+  /members/signup:
+    post:
+      tags:
+        - Member
+      summary: 회원가입
+      operationId: signup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        '201':
+          description: 회원가입 성공
+          headers:
+            Location:
+              description: 생성된 회원 리소스 URI
+              schema:
+                type: string
+        '400':
+          description: 잘못된 입력
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: 이메일 중복
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /members/login:
+    post:
+      tags:
+        - Member
+      summary: 로그인
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: 로그인 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: 로그인 실패
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /books:
+    get:
+      tags:
+        - Catalog
+      summary: 도서 목록 조회
+      operationId: getBooks
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: keyword
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookListResponse'
+
+  /books/{bookId}:
+    get:
+      tags:
+        - Catalog
+      summary: 도서 상세 조회
+      operationId: getBookById
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookResponse'
+        '404':
+          description: 도서 없음
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /orders:
+    post:
+      tags:
+        - Order
+      summary: 주문 생성
+      operationId: createOrder
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+      responses:
+        '201':
+          description: 주문 생성 성공
+        '409':
+          description: 재고 부족
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    # --- Common ---
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "C001"
+        message:
+          type: string
+          example: "Invalid Input Value"
+        status:
+          type: integer
+          example: 400
+
+    # --- Member ---
+    SignupRequest:
+      type: object
+      required:
+        - email
+        - password
+        - name
+      properties:
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        password:
+          type: string
+          format: password
+          example: "password123"
+        name:
+          type: string
+          example: "John Doe"
+        city:
+          type: string
+        street:
+          type: string
+        zipcode:
+          type: string
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+
+    LoginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: "eyJhbGciOiJIUz..."
+
+    # --- Catalog ---
+    BookResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        author:
+          type: string
+        price:
+          type: integer
+        stockQuantity:
+          type: integer
+
+    BookListResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookResponse'
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+
+    # --- Order ---
+    CreateOrderRequest:
+      type: object
+      properties:
+        orderItems:
+          type: array
+          items:
+            type: object
+            properties:
+              bookId:
+                type: integer
+                format: int64
+              count:
+                type: integer
