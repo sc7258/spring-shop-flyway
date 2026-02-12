@@ -34,3 +34,28 @@
 
 ---
 **참고:** 위 파일들은 프로젝트의 규모와 필요에 따라 선택적으로 생성하여 관리합니다. AI에게 작업을 요청할 때 관련 파일을 함께 참조시키면 더 정확한 결과를 얻을 수 있습니다.
+
+## 사용 문서 활용 방법 (Usage Instructions)
+
+### 1. 에이전트 가동 절차 (Operational Protocol)
+모든 질문에 답하기 전, AI는 다음 순서로 컨텍스트를 확인해야 합니다.
+
+*   **Context Check**: 먼저 `.ai/` 폴더 내의 `01-tech-stack.md`와 `02-coding-conventions.md`를 읽고 프로젝트 성격을 파악한다.
+*   **State Sync**: `31-plan.md`를 읽어 현재 작업의 위치와 다음 단계를 확인한다.
+*   **Consistency**: 제안하는 코드가 정의된 API 명세(예: `api-spec.yaml` 등)를 위반하지 않는지 대조한다.
+
+### 2. 증강 코딩 워크플로우 (Augmented Workflow)
+본 프로젝트는 Kent Beck의 방식을 따라 **'생각의 동기화'**를 중시합니다.
+
+*   **No Guessing**: 모호한 요구사항은 추측하여 코딩하지 말고 질문할 것.
+*   **Plan First**: 코드를 짜기 전, 항상 `31-plan.md`에 작업 계획을 작성하거나 업데이트하고 개발자의 승인을 얻을 것.
+*   **Small Steps**: 한 번에 너무 많은 클래스를 만들지 말고, 하나의 테스트를 통과시킬 수 있는 최소 단위로 진행할 것.
+
+### 3. 도구 활용 지침 (Gemini Specifics)
+*   **Refactoring**: "구조 정리(Tidy)" 요청 시에는 로직의 동작을 변경하지 말고 오직 가독성과 구조만 개선할 것.
+*   **Error Handling**: 예외 처리 로직은 `02-coding-conventions.md`에 정의된 `GlobalExceptionHandler` 형식을 강제할 것.
+*   **Test Generation**: 테스트 코드 작성 시 `MockMvc`를 기본으로 하며, DB 접근이 필요한 경우에만 `@DataJpaTest`를 제안할 것.
+
+### 4. 금지 사항 (Constraints)
+*   개발자의 명시적 요청 없이 기존의 API 명세 파일 내용을 변경하지 말 것.
+*   비즈니스 로직에 `System.out.println()`을 사용하지 말 것 (반드시 로깅 라이브러리 활용).

@@ -2,7 +2,7 @@
 
 **Project Name:** spring-shop-flyway
 **Group:** com.sc7258
-**Version:** 0.0.1-SNAPSHOT
+**Version:** 0.1.0
 **Description:** Online Bookstore Order & Delivery API Service
 
 ## Overview

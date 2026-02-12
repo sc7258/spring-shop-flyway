@@ -35,7 +35,13 @@ configOptions.set(mapOf(
 - **Classes:** PascalCase (e.g., `ProductService`)
 - **Functions/Variables:** camelCase (e.g., `findProductById`)
 - **Constants:** UPPER_SNAKE_CASE (e.g., `MAX_RETRY_COUNT`)
-- **Packages:** lowercase, no underscores (e.g., `com.sc7258.shop.domain`)
+- **Packages:** lowercase, no underscores (e.g., `com.sc7258.springshopflyway.domain`)
 
 ## Project Structure
 - Organize code by feature or domain (e.g., `domain`, `controller`, `service`, `repository`).
+
+## Versioning Strategy
+- **Semantic Versioning (Major.Minor.Patch)**을 따릅니다.
+- **Phase 완료 시** Minor 버전을 올립니다. (예: v0.1.0 -> v0.2.0)
+- **버그 수정 시** Patch 버전을 올립니다. (예: v0.1.0 -> v0.1.1)
+- **SNAPSHOT:** 개발 중인 버전에는 `-SNAPSHOT` 접미사를 붙입니다.
