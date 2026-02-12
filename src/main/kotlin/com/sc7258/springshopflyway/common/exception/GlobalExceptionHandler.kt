@@ -1,8 +1,6 @@
 package com.sc7258.springshopflyway.common.exception
 
 import com.sc7258.springshopflyway.model.ErrorResponse
-import jakarta.persistence.EntityNotFoundException
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -10,25 +8,36 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 @RestControllerAdvice
 class GlobalExceptionHandler {
 
-    @ExceptionHandler(DuplicateEmailException::class)
-    fun handleDuplicateEmailException(e: DuplicateEmailException): ResponseEntity<ErrorResponse> {
+    @ExceptionHandler(BusinessException::class)
+    fun handleBusinessException(e: BusinessException): ResponseEntity<ErrorResponse> {
         val response = ErrorResponse(
-            code = "M001",
-            message = e.message ?: "Email already exists",
-            status = HttpStatus.CONFLICT.value()
+            code = e.errorCode.code,
+            message = e.message ?: e.errorCode.message,
+            status = e.errorCode.status.value()
         )
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(response)
+        return ResponseEntity.status(e.errorCode.status).body(response)
     }
 
-    @ExceptionHandler(EntityNotFoundException::class)
-    fun handleEntityNotFoundException(e: EntityNotFoundException): ResponseEntity<ErrorResponse> {
+    // JPA EntityNotFoundException 처리 (기존 코드 호환성 유지 또는 BusinessException으로 변환)
+    @ExceptionHandler(jakarta.persistence.EntityNotFoundException::class)
+    fun handleJpaEntityNotFoundException(e: jakarta.persistence.EntityNotFoundException): ResponseEntity<ErrorResponse> {
+        val errorCode = ErrorCode.ENTITY_NOT_FOUND
         val response = ErrorResponse(
-            code = "C002",
-            message = e.message ?: "Entity not found",
-            status = HttpStatus.NOT_FOUND.value()
+            code = errorCode.code,
+            message = e.message ?: errorCode.message,
+            status = errorCode.status.value()
         )
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response)
+        return ResponseEntity.status(errorCode.status).body(response)
+    }
+    
+    // 그 외 예외 처리 (Optional)
+    @ExceptionHandler(Exception::class)
+    fun handleException(e: Exception): ResponseEntity<ErrorResponse> {
+        val response = ErrorResponse(
+            code = "C999",
+            message = "Internal Server Error: ${e.message}",
+            status = 500
+        )
+        return ResponseEntity.status(500).body(response)
     }
 }
-
-class DuplicateEmailException(message: String) : RuntimeException(message)

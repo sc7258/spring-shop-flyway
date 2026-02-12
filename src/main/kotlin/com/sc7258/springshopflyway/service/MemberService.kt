@@ -1,13 +1,13 @@
 package com.sc7258.springshopflyway.service
 
 import com.sc7258.springshopflyway.common.exception.DuplicateEmailException
+import com.sc7258.springshopflyway.common.exception.LoginFailedException
 import com.sc7258.springshopflyway.common.security.JwtTokenProvider
 import com.sc7258.springshopflyway.domain.member.Address
 import com.sc7258.springshopflyway.domain.member.Member
 import com.sc7258.springshopflyway.domain.member.MemberRepository
 import com.sc7258.springshopflyway.domain.member.Role
 import com.sc7258.springshopflyway.model.LoginRequest
-import com.sc7258.springshopflyway.model.LoginResponse
 import com.sc7258.springshopflyway.model.SignupRequest
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -44,10 +44,10 @@ class MemberService(
     @Transactional(readOnly = true)
     fun login(loginRequest: LoginRequest): String {
         val member = memberRepository.findByEmail(loginRequest.email)
-            ?: throw IllegalArgumentException("Invalid email or password") // TODO: Custom Exception
+            ?: throw LoginFailedException()
 
         if (!passwordEncoder.matches(loginRequest.password, member.password)) {
-            throw IllegalArgumentException("Invalid email or password")
+            throw LoginFailedException()
         }
 
         return jwtTokenProvider.createToken(member.email, member.role.name)

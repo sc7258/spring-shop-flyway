@@ -11,6 +11,14 @@
 - Use DTOs (Data Transfer Objects) for API request and response bodies, avoiding exposing entities directly.
 - Use standard HTTP status codes.
 
+## Exception Handling
+- **ErrorCode Enum:** 모든 에러 코드, 메시지, HTTP 상태 코드는 `ErrorCode` Enum에서 중앙 관리합니다.
+- **Custom Exception:**
+  - 비즈니스 로직에서 발생하는 예외는 `BusinessException`을 상속받아 구현합니다.
+  - 예: `class LoginFailedException : BusinessException(ErrorCode.LOGIN_FAILED)`
+  - `IllegalArgumentException` 등 표준 예외를 직접 던지는 것을 지양하고, 의미 있는 커스텀 예외로 래핑합니다.
+- **Global Handling:** `GlobalExceptionHandler`에서 `BusinessException`을 잡아 표준 `ErrorResponse` 포맷으로 반환합니다.
+
 ## OpenAPI Generator Rules
 - **Source of Truth:** `openapi/openapi.yaml`
 - **Generated Code:** `build/generate-resources` (또는 설정된 경로)에 생성된 코드는 **절대 직접 수정하지 않습니다.**
@@ -33,7 +41,8 @@ configOptions.set(mapOf(
     "delegatePattern" to "true",
     "useTags" to "true",
     "useSpringBoot3" to "true",
-    "gradleBuildFile" to "false"
+    "gradleBuildFile" to "false",
+    "enumPropertyNaming" to "UPPERCASE"
 ))
 ```
 

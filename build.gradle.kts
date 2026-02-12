@@ -100,3 +100,11 @@ sourceSets {
 tasks.compileKotlin {
     dependsOn(tasks.openApiGenerate)
 }
+
+// openapi.yaml 파일을 static 리소스로 복사
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE // 중복 시 덮어쓰기
+    from("$rootDir/openapi/openapi.yaml") {
+        into("static/api/v1") // 경로 변경
+    }
+}

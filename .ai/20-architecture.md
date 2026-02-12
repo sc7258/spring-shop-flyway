@@ -22,13 +22,23 @@
 ### 2.4 Infrastructure Layer (`infrastructure`)
 - DB 구현체(JpaRepository), 외부 API 호출, 메시징 시스템 등 실제 기술적인 구현을 담당합니다.
 
-## 3. Tech Components
+## 3. Cross-Cutting Concerns (공통 관심사)
+### 3.1 Exception Handling
+- **Strategy:** 모든 예외는 `GlobalExceptionHandler`를 통해 중앙에서 처리합니다.
+- **Structure:** `ErrorCode` Enum을 통해 에러 코드와 메시지를 관리하며, `BusinessException`을 상속받은 커스텀 예외를 사용합니다.
+- **Response:** 클라이언트에게는 항상 표준화된 `ErrorResponse` 포맷(code, message, status)을 반환합니다.
+
+### 3.2 Security
+- **Authentication:** JWT 기반의 Stateless 인증을 사용합니다.
+- **Authorization:** Spring Security의 Filter Chain을 통해 URL별 접근 권한을 제어합니다.
+
+## 4. Tech Components
 - **Web Server:** Tomcat (Spring Boot Embedded)
 - **Database:** H2 (Local/Test), PostgreSQL (Prod)
 - **Migration:** Flyway (DB 스키마 버전 관리)
 - **Security:** Spring Security + JWT (Stateless Authentication)
 
-## 4. Package Structure
+## 5. Package Structure
 ```
 com.sc7258.shop
 ├── common          // 공통 유틸리티, 예외 처리

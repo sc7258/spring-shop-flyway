@@ -38,3 +38,30 @@
 
 ### 결론
 - OpenAPI Generator 사용 시, Entity와 DTO 간의 Enum 매핑이 깨지는 경우 `enumPropertyNaming` 옵션을 사용하여 생성 전략을 명시적으로 제어하는 것이 가장 깔끔하고 안정적인 해결책이다.
+
+---
+
+## 2. Swagger UI 설정 및 OpenAPI SSOT 구축
+
+### 문제 현상 1: 403 Forbidden
+- **현상:** `/api/v1/swagger-ui/index.html` 접속 시 403 에러 발생.
+- **원인:** Spring Security가 정적 리소스 및 Swagger UI 경로를 차단함.
+- **해결:** `SecurityConfig.kt`에서 `WebSecurityCustomizer`를 사용하여 관련 경로를 `ignoring()` 처리.
+  - `/api/v1/swagger-ui/**`, `/swagger-ui/**`, `/openapi.yaml` 등.
+
+### 문제 현상 2: 404 Not Found
+- **현상:** Security 설정 후에도 404 에러 발생.
+- **원인:** `application.yml`에서 `springdoc.api-docs.enabled: false`로 설정했더니, SpringDoc이 Swagger UI 리소스 매핑까지 비활성화함.
+- **해결:**
+  - `api-docs.enabled` 설정을 제거(기본값 `true` 사용).
+  - `springdoc.swagger-ui.path`를 `/api/v1/swagger-ui.html`로 설정하여 SpringDoc이 해당 경로를 처리하도록 유도.
+
+### 문제 현상 3: OpenAPI Generator Base Path
+- **현상:** `openapi.yaml`의 `servers` URL을 `/api/v1`으로 설정했더니, 생성된 Controller에 `@RequestMapping("/api/v1")`이 붙음.
+- **확인:** OpenAPI Generator (Kotlin Spring)는 `servers` URL을 파싱하여 `base-path`로 사용하는 로직이 있음.
+- **결론:** 실제 서버가 `/api/v1` 접두사를 사용하므로, `servers` URL을 `/api/v1`으로 설정하는 것이 올바름.
+
+### 최종 설정 (SSOT)
+- **`build.gradle.kts`:** `openapi.yaml`을 `src/main/resources/static/api/v1/`으로 복사.
+- **`application.yml`:** `springdoc.swagger-ui.url: /api/v1/openapi.yaml` 설정.
+- **결과:** Swagger UI가 정적 파일(`openapi.yaml`)을 로드하며, API 호출 시 `/api/v1` 경로를 정상적으로 사용함.

@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- **Documentation:**
+  - `02-coding-conventions.md`: Exception Handling 규칙 추가.
+  - `20-architecture.md`: Cross-Cutting Concerns (Exception Handling) 섹션 추가.
+  - `openapi.yaml`: 에러 코드 테이블을 `<details>` 태그로 감싸서 가독성 개선.
+- **OpenAPI & Swagger:**
+  - OpenAPI SSOT 구축 (정적 파일 로드, 경로 변경).
+  - Swagger UI 경로를 `/api/v1/swagger-ui.html`로 변경.
+  - `SecurityConfig` 및 `WebConfig` 설정 개선.
 - **Delivery Domain:**
   - `Delivery` Entity 및 Repository 구현.
   - 배송 생성 API (`POST /api/v1/deliveries`) 구현.

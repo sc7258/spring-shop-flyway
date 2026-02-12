@@ -4,15 +4,22 @@
 
 ## 1. OpenAPI & Documentation (SSOT)
 ### 1.1 Swagger UI 설정 개선
-- [ ] **Configuration**
+- [x] **Configuration**
   - SpringDoc이 자동 생성하는 문서 비활성화.
   - `openapi.yaml` 파일을 정적 리소스로 서빙.
   - Swagger UI가 `openapi.yaml`을 로드하도록 `application.yml` 설정.
-  - Swagger UI 경로를 `/api/v1/swagger-ui/index.html`로 변경.
+  - Swagger UI 경로를 `/api/v1/swagger-ui.html`로 변경.
   - `SecurityConfig`에 Swagger UI 경로 허용 추가.
-- [ ] **Spec Refactoring**
+
+### 1.2 Spec Refactoring & Quality
+- [x] **Servers**
   - `servers` URL을 상대 경로(`/api/v1`)로 변경.
-  - `tags`, `description`, `example` 등 문서 품질 보강.
+- [x] **Error Codes**
+  - 에러 코드 테이블을 `<details>` 태그로 감싸서 접을 수 있게 개선.
+- [ ] **Error Handling Standardization**
+  - `LoginFailedException` 등 커스텀 예외 정의.
+  - `GlobalExceptionHandler`에서 모든 예외를 `ErrorResponse`로 매핑.
+  - `ApiDelegateImpl`의 `try-catch` 제거 및 표준화.
 
 ## 2. jOOQ Integration
 ### 2.1 Setup

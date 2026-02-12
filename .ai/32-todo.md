@@ -2,9 +2,20 @@
 
 ## Current Phase: Phase 5 - Advanced Features & Documentation
 
-### 1. OpenAPI & Documentation
-- [ ] **Swagger UI**: `openapi.yaml` 직접 로드 및 경로 변경(`/api/v1/swagger-ui/index.html`).
-- [ ] **Spec**: `servers` URL 상대 경로 변경 및 문서 품질 개선.
+### 1. OpenAPI & Documentation (SSOT)
+#### 1.1 Swagger UI 설정 개선
+- [x] **Configuration**: `application.yml` 설정 (SpringDoc 비활성화, 정적 리소스 매핑).
+- [x] **Path Change**: Swagger UI 경로를 `/api/v1/swagger-ui.html`로 변경.
+- [x] **Security**: `SecurityConfig`에 Swagger UI 경로 허용 추가.
+
+#### 1.2 Spec Refactoring
+- [x] **Servers**: `openapi.yaml`의 `servers` URL을 상대 경로(`/api/v1`)로 변경.
+- [x] **Error Codes**: 에러 코드 테이블을 `<details>` 태그로 감싸서 접을 수 있게 개선.
+- [ ] **Error Handling**:
+  - `ErrorCode` Enum 및 `BusinessException` 생성.
+  - `LoginFailedException` 등 커스텀 예외 추가.
+  - `GlobalExceptionHandler`에서 모든 예외를 `ErrorResponse`로 매핑.
+  - `MemberApiDelegateImpl` 등에서 `try-catch` 제거 및 표준화.
 
 ### 2. jOOQ Integration
 - [ ] **Setup**: jOOQ 설정 및 코드 생성 환경 구축.

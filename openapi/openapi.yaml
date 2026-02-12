@@ -5,7 +5,9 @@ info:
     # Online Bookstore API
     아마존과 유사한 온라인 도서 주문 및 배송 서비스 API입니다.
 
-    ## Error Codes
+    <details>
+    <summary><strong>Error Codes (Click to expand)</strong></summary>
+
     | Code | Message | Status | Description |
     |---|---|---|---|
     | `C001` | Invalid Input Value | 400 | 입력값이 올바르지 않습니다. |
@@ -16,10 +18,12 @@ info:
     | `O001` | Order Not Found | 404 | 주문을 찾을 수 없습니다. |
     | `D001` | Delivery Not Found | 404 | 배송 정보를 찾을 수 없습니다. |
 
+    </details>
+
   version: 0.0.1
 servers:
-  - url: http://localhost:8080/api/v1
-    description: Local Development Server
+  - url: /api/v1
+    description: Relative Path (Environment Independent)
 
 tags:
   - name: Member

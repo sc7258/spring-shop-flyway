@@ -1,5 +1,8 @@
 package com.sc7258.springshopflyway.service
 
+import com.sc7258.springshopflyway.common.exception.EntityNotFoundException
+import com.sc7258.springshopflyway.common.exception.InvalidInputException
+import com.sc7258.springshopflyway.common.exception.OrderNotFoundException
 import com.sc7258.springshopflyway.domain.catalog.BookRepository
 import com.sc7258.springshopflyway.domain.member.MemberRepository
 import com.sc7258.springshopflyway.domain.order.Order
@@ -8,7 +11,6 @@ import com.sc7258.springshopflyway.domain.order.OrderRepository
 import com.sc7258.springshopflyway.domain.order.OrderStatus
 import com.sc7258.springshopflyway.model.CreateOrderRequest
 import com.sc7258.springshopflyway.model.OrderResponse
-import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -29,12 +31,12 @@ class OrderService(
 
         val items = request.orderItems ?: emptyList()
         if (items.isEmpty()) {
-            throw IllegalArgumentException("Order items cannot be empty")
+            throw InvalidInputException("Order items cannot be empty")
         }
 
         items.forEach { itemRequest ->
-            val bookId = itemRequest.bookId ?: throw IllegalArgumentException("Book ID is required")
-            val count = itemRequest.count ?: throw IllegalArgumentException("Count is required")
+            val bookId = itemRequest.bookId ?: throw InvalidInputException("Book ID is required")
+            val count = itemRequest.count ?: throw InvalidInputException("Count is required")
 
             val book = bookRepository.findById(bookId)
                 .orElseThrow { EntityNotFoundException("Book not found: $bookId") }
@@ -52,7 +54,7 @@ class OrderService(
             mockPaymentService.processPayment(order.totalAmount)
             order.status = OrderStatus.PAID
         } catch (e: Exception) {
-            throw IllegalStateException("Payment failed", e)
+            throw IllegalStateException("Payment failed", e) // TODO: PaymentFailedException
         }
 
         return orderRepository.save(order).id!!
@@ -75,15 +77,15 @@ class OrderService(
     @Transactional
     fun cancelOrder(email: String, orderId: Long) {
         val order = orderRepository.findById(orderId)
-            .orElseThrow { EntityNotFoundException("Order not found: $orderId") }
+            .orElseThrow { OrderNotFoundException("Order not found: $orderId") }
 
         if (order.member.email != email) {
-            throw IllegalArgumentException("Not authorized to cancel this order") // TODO: Custom Exception
+            throw InvalidInputException("Not authorized to cancel this order")
         }
 
         order.cancel()
         
-        // 결제 취소 (결제 ID가 없으므로 주문 ID를 대신 사용하거나, 추후 Payment 엔티티 추가 필요)
+        // 결제 취소
         mockPaymentService.cancelPayment(orderId.toString())
     }
 }

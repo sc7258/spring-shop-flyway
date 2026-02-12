@@ -1,5 +1,7 @@
 package com.sc7258.springshopflyway.service
 
+import com.sc7258.springshopflyway.common.exception.DeliveryNotFoundException
+import com.sc7258.springshopflyway.common.exception.EntityNotFoundException
 import com.sc7258.springshopflyway.domain.delivery.Delivery
 import com.sc7258.springshopflyway.domain.delivery.DeliveryRepository
 import com.sc7258.springshopflyway.domain.member.Address
@@ -7,7 +9,6 @@ import com.sc7258.springshopflyway.domain.order.OrderRepository
 import com.sc7258.springshopflyway.model.CreateDeliveryRequest
 import com.sc7258.springshopflyway.model.DeliveryResponse
 import com.sc7258.springshopflyway.model.DeliveryResponseAddress
-import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -38,7 +39,7 @@ class DeliveryService(
     @Transactional(readOnly = true)
     fun getDeliveryById(deliveryId: Long): DeliveryResponse {
         val delivery = deliveryRepository.findById(deliveryId)
-            .orElseThrow { EntityNotFoundException("Delivery not found: $deliveryId") }
+            .orElseThrow { DeliveryNotFoundException("Delivery not found: $deliveryId") }
 
         return DeliveryResponse(
             id = delivery.id,
