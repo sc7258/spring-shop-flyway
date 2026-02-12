@@ -14,11 +14,22 @@ info:
     | `M002` | Login Failed | 401 | 이메일 또는 비밀번호가 일치하지 않습니다. |
     | `B001` | Out of Stock | 409 | 재고가 부족합니다. |
     | `O001` | Order Not Found | 404 | 주문을 찾을 수 없습니다. |
+    | `D001` | Delivery Not Found | 404 | 배송 정보를 찾을 수 없습니다. |
 
   version: 0.0.1
 servers:
   - url: http://localhost:8080/api/v1
     description: Local Development Server
+
+tags:
+  - name: Member
+    description: 회원 관리 API
+  - name: Catalog
+    description: 도서 관리 API
+  - name: Order
+    description: 주문 관리 API
+  - name: Delivery
+    description: 배송 관리 API
 
 paths:
   /members/signup:
@@ -137,6 +148,22 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
   /orders:
+    get:
+      tags:
+        - Order
+      summary: 주문 목록 조회
+      operationId: getOrders
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponse'
     post:
       tags:
         - Order
@@ -155,6 +182,85 @@ paths:
           description: 주문 생성 성공
         '409':
           description: 재고 부족
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /orders/{orderId}/cancel:
+    post:
+      tags:
+        - Order
+      summary: 주문 취소
+      operationId: cancelOrder
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: 주문 취소 성공
+        '404':
+          description: 주문 없음
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /deliveries:
+    post:
+      tags:
+        - Delivery
+      summary: 배송 생성
+      operationId: createDelivery
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDeliveryRequest'
+      responses:
+        '201':
+          description: 배송 생성 성공
+          headers:
+            Location:
+              description: 생성된 배송 리소스 URI
+              schema:
+                type: string
+        '404':
+          description: 주문 없음
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /deliveries/{deliveryId}:
+    get:
+      tags:
+        - Delivery
+      summary: 배송 상태 조회
+      operationId: getDeliveryById
+      parameters:
+        - name: deliveryId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryResponse'
+        '404':
+          description: 배송 정보 없음
           content:
             application/json:
               schema:
@@ -270,3 +376,57 @@ components:
                 format: int64
               count:
                 type: integer
+
+    OrderResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        status:
+          type: string
+        totalAmount:
+          type: integer
+        orderedAt:
+          type: string
+          format: date-time
+
+    # --- Delivery ---
+    CreateDeliveryRequest:
+      type: object
+      required:
+        - orderId
+      properties:
+        orderId:
+          type: integer
+          format: int64
+        city:
+          type: string
+        street:
+          type: string
+        zipcode:
+          type: string
+
+    DeliveryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        orderId:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum: [READY, COMP, CANCEL]
+        trackingNumber:
+          type: string
+        address:
+          type: object
+          properties:
+            city:
+              type: string
+            street:
+              type: string
+            zipcode:
+              type: string

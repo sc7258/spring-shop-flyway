@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.sc7258"
-version = "0.1.0"
+version = "0.2.0"
 description = "spring-shop-flyway"
 
 java {
@@ -46,6 +46,7 @@ dependencies {
     
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.springframework.security:spring-security-test") // Security Test 추가
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -77,7 +78,8 @@ openApiGenerate {
         "delegatePattern" to "true",
         "useTags" to "true",
         "useSpringBoot3" to "true",
-        "gradleBuildFile" to "false"
+        "gradleBuildFile" to "false",
+        "enumPropertyNaming" to "UPPERCASE"
     ))
     globalProperties.set(mapOf(
         "models" to "",

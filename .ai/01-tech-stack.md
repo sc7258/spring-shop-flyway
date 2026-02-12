@@ -15,6 +15,7 @@
 - **H2:** Runtime dependency (likely for local development/testing)
 - **PostgreSQL:** Runtime dependency (likely for production)
 - **Flyway:** Database migration tool
+- **jOOQ:** (Planned) For Type-safe SQL & Dynamic Query
 
 ## Build Tool
 - **Gradle:** Kotlin DSL (build.gradle.kts)

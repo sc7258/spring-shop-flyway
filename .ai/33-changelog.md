@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- **Delivery Domain:**
+  - `Delivery` Entity 및 Repository 구현.
+  - 배송 생성 API (`POST /api/v1/deliveries`) 구현.
+  - 배송 상태 조회 API (`GET /api/v1/deliveries/{deliveryId}`) 구현.
+  - `DeliveryControllerTest`: 배송 생성 및 조회 테스트 작성.
+  - `E2EIntegrationTest`: 회원가입부터 배송 조회까지 전체 시나리오 검증.
+- **Order Domain:**
+  - `Order`, `OrderItem` Entity 및 Repository 구현.
+  - 주문 생성 API (`POST /api/v1/orders`) 구현 (재고 차감, 결제 연동).
+  - 주문 목록 조회 API (`GET /api/v1/orders`) 구현.
+  - 주문 취소 API (`POST /api/v1/orders/{orderId}/cancel`) 구현 (재고 복구, 결제 취소).
+  - `MockPaymentService`: 결제 승인/취소 모의 구현.
+  - `OrderControllerTest`: 주문 생성, 조회, 취소 테스트 작성.
+  - `OrderIntegrationTest`: 전체 주문 프로세스 통합 테스트 작성.
+- **Catalog Domain:**
+  - `Book` Entity, Repository, Service 구현.
+  - 도서 목록 조회 API (`GET /api/v1/books`) 구현 (페이징, 검색).
+  - 도서 상세 조회 API (`GET /api/v1/books/{bookId}`) 구현.
+  - `CatalogControllerTest` 작성 및 통과.
+  - `V2__insert_sample_books.sql`: 초기 샘플 도서 데이터(5권) 추가.
+  - `CatalogIntegrationTest`: 도서 목록 및 상세 조회 통합 테스트 작성.
+- **Refactoring:**
+  - Member 및 Catalog 도메인의 계층 분리 (`ApiDelegateImpl` vs `Service`).
+  - `GlobalExceptionHandler`에 `EntityNotFoundException` 핸들링 추가.
+  - OpenAPI Generator Enum 생성 규칙을 `UPPERCASE`로 통일.
+
+## [0.1.0] - 2026-02-12
+### Added
 - **Member Domain:**
   - `Member` Entity, Repository, Service 구현.
   - 회원가입 API (`POST /api/v1/members/signup`) 구현.

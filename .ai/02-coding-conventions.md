@@ -14,10 +14,16 @@
 ## OpenAPI Generator Rules
 - **Source of Truth:** `openapi/openapi.yaml`
 - **Generated Code:** `build/generate-resources` (또는 설정된 경로)에 생성된 코드는 **절대 직접 수정하지 않습니다.**
-- **Usage (Delegate Pattern):**
-  - OpenAPI Generator가 `Api` 인터페이스, `ApiController`, `ApiDelegate` 인터페이스를 생성합니다.
-  - 개발자는 `ApiDelegate` 인터페이스를 구현(`implements`)하는 `Service` 클래스(예: `MemberApiDelegateImpl`)를 작성합니다.
-  - 이 구현체는 `@Service` 어노테이션을 붙여 스프링 빈으로 등록해야 합니다.
+- **Layer Separation (Delegate Pattern):**
+  - **Controller Layer (`ApiDelegateImpl`):**
+    - OpenAPI Generator가 생성한 `ApiDelegate` 인터페이스를 구현합니다.
+    - 예: `MemberApiDelegateImpl`
+    - 역할: HTTP 요청/응답 처리, DTO 변환, `Service` 호출.
+  - **Business Layer (`Service`):**
+    - 순수 비즈니스 로직을 담당합니다.
+    - 예: `MemberService`
+    - 역할: 트랜잭션 관리, 도메인 로직 수행, Repository 호출.
+    - **주의:** `Service`는 `ApiDelegate`를 직접 구현하지 않습니다.
 
 ### Configuration Options (Gradle)
 `build.gradle.kts`의 `openApiGenerate` 태스크 설정 시 아래 옵션을 준수합니다:
