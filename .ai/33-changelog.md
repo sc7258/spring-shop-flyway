@@ -38,6 +38,9 @@ All notable changes to this project will be documented in this file.
   - Member 및 Catalog 도메인의 계층 분리 (`ApiDelegateImpl` vs `Service`).
   - `GlobalExceptionHandler`에 `EntityNotFoundException` 핸들링 추가.
   - OpenAPI Generator Enum 생성 규칙을 `UPPERCASE`로 통일.
+  - `GlobalExceptionHandler`에서 `BusinessException` 처리 시 `ErrorResponse` 매핑 표준화.
+  - `SecurityConfig`에서 Swagger UI 관련 경로 허용 설정 추가.
+  - `OrderService`에서 결제 실패 시 `PaymentFailedException`을 던지도록 수정.
 
 ## [0.1.0] - 2026-02-12
 ### Added

@@ -1,9 +1,9 @@
 package com.sc7258.springshopflyway.service
 
+import com.sc7258.springshopflyway.common.exception.EntityNotFoundException
 import com.sc7258.springshopflyway.domain.catalog.BookRepository
 import com.sc7258.springshopflyway.model.BookListResponse
 import com.sc7258.springshopflyway.model.BookResponse
-import jakarta.persistence.EntityNotFoundException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service

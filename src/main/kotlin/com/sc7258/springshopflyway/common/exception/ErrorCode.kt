@@ -10,6 +10,7 @@ enum class ErrorCode(
     // Common
     INVALID_INPUT_VALUE("C001", "Invalid Input Value", HttpStatus.BAD_REQUEST),
     ENTITY_NOT_FOUND("C002", "Entity Not Found", HttpStatus.NOT_FOUND),
+    PAYMENT_FAILED("C003", "Payment Failed", HttpStatus.INTERNAL_SERVER_ERROR),
 
     // Member
     EMAIL_ALREADY_EXISTS("M001", "Email Already Exists", HttpStatus.CONFLICT),

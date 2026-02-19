@@ -50,9 +50,9 @@ class SecurityConfig(
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
                 it.requestMatchers(
-                    "/api/v1/members/signup",
-                    "/api/v1/members/login",
-                    "/api/v1/books/**"
+                    AntPathRequestMatcher("/api/v1/members/signup"),
+                    AntPathRequestMatcher("/api/v1/members/login"),
+                    AntPathRequestMatcher("/api/v1/books/**")
                 ).permitAll()
                 .anyRequest().authenticated()
             }

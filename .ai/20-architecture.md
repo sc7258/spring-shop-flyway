@@ -28,15 +28,23 @@
 - **Structure:** `ErrorCode` Enum을 통해 에러 코드와 메시지를 관리하며, `BusinessException`을 상속받은 커스텀 예외를 사용합니다.
 - **Response:** 클라이언트에게는 항상 표준화된 `ErrorResponse` 포맷(code, message, status)을 반환합니다.
 
-### 3.2 Security
-- **Authentication:** JWT 기반의 Stateless 인증을 사용합니다.
-- **Authorization:** Spring Security의 Filter Chain을 통해 URL별 접근 권한을 제어합니다.
+### 3.2 Security & Authentication
+- **Current (Phase 1~5):** JWT 기반의 자체 인증(Custom Authentication)을 사용합니다.
+  - `JwtTokenProvider`를 통해 토큰 발급 및 검증.
+  - `UserDetailsService`를 구현하여 DB 기반 사용자 조회.
+- **Future (Phase 6+):** **Keycloak (OAuth2/OIDC)** 기반의 통합 인증으로 전환 예정.
+  - Spring Security OAuth2 Resource Server 설정.
+  - 사용자 정보 및 권한 관리를 Keycloak으로 위임.
+
+### 3.3 Administration (Admin)
+- **Role-Based Access Control (RBAC):** `ROLE_ADMIN` 권한을 가진 사용자만 접근 가능한 별도의 API 그룹(`/api/v1/admin/**`)을 운영합니다.
+- **Audit Logging:** 관리자의 주요 활동(회원 차단, 주문 강제 취소 등)은 별도의 감사 로그(Audit Log)로 기록하여 추적성을 확보합니다.
 
 ## 4. Tech Components
 - **Web Server:** Tomcat (Spring Boot Embedded)
 - **Database:** H2 (Local/Test), PostgreSQL (Prod)
 - **Migration:** Flyway (DB 스키마 버전 관리)
-- **Security:** Spring Security + JWT (Stateless Authentication)
+- **Security:** Spring Security + JWT (Stateless Authentication) -> Keycloak (Planned)
 
 ## 5. Package Structure
 ```

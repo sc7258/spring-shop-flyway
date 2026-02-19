@@ -42,18 +42,51 @@ API First 및 TDD 방법론을 적용하여 단계적으로 기능을 확장합�
 - [x] **System Stability**
   - [x] 전 구간 통합 테스트 (E2E Test)
 
-## Phase 5: Advanced Features & Documentation (v1.0.0)
-**목표:** 기술적 완성도를 높이고, 문서를 보강하여 정식 버전을 릴리즈한다.
-- [ ] **OpenAPI & Documentation (SSOT)**
-  - [ ] Swagger UI가 `openapi.yaml` 파일을 직접 로드하도록 설정 (SSOT 구축)
-  - [ ] Swagger UI 경로를 `/api/v1/swagger-ui/index.html`로 변경
-  - [ ] `servers` URL을 상대 경로(`/api/v1`)로 변경하여 환경 독립성 확보
-  - [ ] API 문서 품질 개선 (설명, 예제 보강)
+## Phase 5: Stability & Monitoring (v0.5.0)
+**목표:** 시스템의 안정성을 확보하고, 운영 가능한 수준의 모니터링 환경을 구축한다.
+- [x] **OpenAPI & Documentation (SSOT)**
+  - [x] Swagger UI가 `openapi.yaml` 파일을 직접 로드하도록 설정 (SSOT 구축)
+  - [x] Swagger UI 경로를 `/api/v1/swagger-ui.html`로 변경
+  - [x] `servers` URL을 상대 경로(`/api/v1`)로 변경하여 환경 독립성 확보
+  - [x] Error Handling Refactoring (표준 예외 처리)
+- [ ] **Test Coverage**
+  - [ ] 주요 비즈니스 로직(주문, 결제)의 엣지 케이스 테스트 보강
+  - [ ] 실패 시나리오(재고 부족, 결제 실패 등) 검증
+- [ ] **Monitoring & Logging**
+  - [ ] Spring Boot Actuator 설정 (Health Check, Metrics)
+  - [ ] Logback 설정 구체화 (File Appender, JSON Format)
+  - [ ] 주요 로직(주문, 결제)에 대한 구조화된 로그 남기기
+
+## Phase 6: Security & Administration (v0.6.0)
+**목표:** 인증 체계를 고도화하고, 관리자 기능을 추가하여 운영 효율성을 높인다.
+- [ ] **Keycloak Integration**
+  - [ ] Keycloak 컨테이너 설정 (Docker Compose)
+  - [ ] Spring Security OAuth2 Resource Server 설정
+  - [ ] 기존 JWT 인증 로직 마이그레이션
+- [ ] **Admin API**
+  - [ ] 관리자 권한(Role.ADMIN) 추가 및 접근 제어
+  - [ ] 관리자용 도서/회원/주문 관리 API 구현
+
+## Phase 7: User Engagement Features (v0.7.0)
+**목표:** 사용자의 참여를 유도하고 편의성을 높이는 기능을 추가한다.
+- [ ] **Cart (장바구니)**
+  - [ ] 장바구니 담기, 수정, 삭제 API
+  - [ ] 장바구니 조회 API
+- [ ] **Review (리뷰)**
+  - [ ] 도서 리뷰 작성 및 평점 부여 API
+  - [ ] 도서별 리뷰 목록 조회 API
+- [ ] **Wishlist (위시리스트)**
+  - [ ] 위시리스트 추가/삭제 API
+  - [ ] 위시리스트 목록 조회 API
+
+## Phase 8: Performance & Optimization (v1.0.0)
+**목표:** 대용량 트래픽 처리를 위한 성능 최적화 및 기술적 고도화를 수행한다.
 - [ ] **jOOQ Integration**
   - [ ] jOOQ 설정 및 코드 생성 환경 구축
   - [ ] 복잡한 조회 쿼리(Catalog 검색 등)를 jOOQ로 리팩토링
-- [ ] **Performance & Optimization**
-  - [ ] 성능 테스트 및 쿼리 최적화 (N+1 문제 해결, 인덱싱)
+- [ ] **Performance Tuning**
+  - [ ] N+1 문제 해결 및 인덱싱 최적화
+  - [ ] 성능 테스트 수행 및 병목 지점 개선
 
 ## Future Works (v1.1.0+)
 - [ ] **Infrastructure & Architecture**

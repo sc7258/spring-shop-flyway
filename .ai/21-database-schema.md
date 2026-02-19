@@ -14,6 +14,7 @@
   - `password` (Encrypted)
   - `name`
   - `role` (USER, ADMIN)
+    - *Note:* Keycloak 도입 시 `role` 컬럼은 Keycloak의 Role Mapping 정보와 동기화되거나, DB 내에서는 최소한의 정보만 유지할 수 있음.
   - `address_city`, `address_street`, `address_zipcode` (Embedded Address)
 
 ### 2.2 Catalog (도서)
@@ -48,6 +49,15 @@
   - `status` (READY, COMP, CANCEL)
   - `address_city`, `address_street`, `address_zipcode` (배송지 주소)
 
+### 2.5 Administration (관리자) - *New (Phase 6)*
+- **`admin_audit_logs`** (Planned)
+  - `id` (PK)
+  - `admin_id` (FK -> members.id)
+  - `action` (e.g., "CANCEL_ORDER", "BLOCK_USER")
+  - `target_id` (대상 리소스 ID)
+  - `details` (JSON or Text)
+  - `created_at`
+
 ## 3. ER Diagram (Conceptual)
 ```mermaid
 erDiagram
@@ -55,4 +65,5 @@ erDiagram
     ORDER ||--|{ ORDER_ITEM : contains
     BOOK ||--o{ ORDER_ITEM : included_in
     ORDER ||--|| DELIVERY : has
+    MEMBER ||--o{ ADMIN_AUDIT_LOG : performs
 ```

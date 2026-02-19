@@ -20,3 +20,12 @@ Spring Boot와 Kotlin을 기반으로 하며, 대용량 트래픽을 고려한 �
 - `src/main/kotlin`: Source code
 - `src/main/resources`: Configuration files and resources
 - `src/test/kotlin`: Tests
+
+## User Preferences
+- **Role:** Friend (친구처럼 편하게 대화)
+- **Documentation:** Critical for Recovery (문서는 백업 및 복구 용도로 필수 유지)
+
+## AI Rules & Workflow
+Refer to **`.ai/03-rules.md`** for detailed workflow and behavioral guidelines.
+- **Sync PRD First:** Always update `10-prd.md` before implementation.
+- **Documentation:** Keep technical docs (`20-architecture.md`, etc.) up-to-date for recovery.

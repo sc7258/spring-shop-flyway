@@ -6,6 +6,9 @@ class InvalidInputException(message: String = ErrorCode.INVALID_INPUT_VALUE.mess
 class EntityNotFoundException(message: String = ErrorCode.ENTITY_NOT_FOUND.message) : 
     BusinessException(ErrorCode.ENTITY_NOT_FOUND, message)
 
+class PaymentFailedException(message: String = ErrorCode.PAYMENT_FAILED.message) :
+    BusinessException(ErrorCode.PAYMENT_FAILED, message)
+
 class DuplicateEmailException(message: String = ErrorCode.EMAIL_ALREADY_EXISTS.message) : 
     BusinessException(ErrorCode.EMAIL_ALREADY_EXISTS, message)
 

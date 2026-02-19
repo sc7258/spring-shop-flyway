@@ -12,8 +12,7 @@ class GlobalExceptionHandler {
     fun handleBusinessException(e: BusinessException): ResponseEntity<ErrorResponse> {
         val response = ErrorResponse(
             code = e.errorCode.code,
-            message = e.message ?: e.errorCode.message,
-            status = e.errorCode.status.value()
+            message = e.message ?: e.errorCode.message
         )
         return ResponseEntity.status(e.errorCode.status).body(response)
     }
@@ -24,8 +23,7 @@ class GlobalExceptionHandler {
         val errorCode = ErrorCode.ENTITY_NOT_FOUND
         val response = ErrorResponse(
             code = errorCode.code,
-            message = e.message ?: errorCode.message,
-            status = errorCode.status.value()
+            message = e.message ?: errorCode.message
         )
         return ResponseEntity.status(errorCode.status).body(response)
     }
@@ -35,8 +33,7 @@ class GlobalExceptionHandler {
     fun handleException(e: Exception): ResponseEntity<ErrorResponse> {
         val response = ErrorResponse(
             code = "C999",
-            message = "Internal Server Error: ${e.message}",
-            status = 500
+            message = "Internal Server Error: ${e.message}"
         )
         return ResponseEntity.status(500).body(response)
     }

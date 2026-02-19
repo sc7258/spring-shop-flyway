@@ -3,6 +3,7 @@ package com.sc7258.springshopflyway.service
 import com.sc7258.springshopflyway.common.exception.EntityNotFoundException
 import com.sc7258.springshopflyway.common.exception.InvalidInputException
 import com.sc7258.springshopflyway.common.exception.OrderNotFoundException
+import com.sc7258.springshopflyway.common.exception.PaymentFailedException
 import com.sc7258.springshopflyway.domain.catalog.BookRepository
 import com.sc7258.springshopflyway.domain.member.MemberRepository
 import com.sc7258.springshopflyway.domain.order.Order
@@ -54,7 +55,7 @@ class OrderService(
             mockPaymentService.processPayment(order.totalAmount)
             order.status = OrderStatus.PAID
         } catch (e: Exception) {
-            throw IllegalStateException("Payment failed", e) // TODO: PaymentFailedException
+            throw PaymentFailedException("Payment failed: ${e.message}")
         }
 
         return orderRepository.save(order).id!!
