@@ -4,7 +4,7 @@ plugins {
     id("org.springframework.boot") version "3.5.10"
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.jpa") version "1.9.25"
-    id("org.openapi.generator") version "7.2.0"
+    id("org.openapi.generator") version "7.10.0"
 }
 
 group = "com.sc7258"
@@ -26,6 +26,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     
@@ -70,7 +72,7 @@ tasks.withType<Test> {
 openApiGenerate {
     generatorName.set("kotlin-spring")
     inputSpec.set("$rootDir/openapi/openapi.yaml")
-    outputDir.set("$buildDir/generated")
+    outputDir.set("${layout.buildDirectory.get()}/generated")
     apiPackage.set("com.sc7258.springshopflyway.api")
     modelPackage.set("com.sc7258.springshopflyway.model")
     configOptions.set(mapOf(
@@ -92,7 +94,7 @@ openApiGenerate {
 sourceSets {
     main {
         kotlin {
-            srcDir("$buildDir/generated/src/main/kotlin")
+            srcDir("${layout.buildDirectory.get()}/generated/src/main/kotlin")
         }
     }
 }

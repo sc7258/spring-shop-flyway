@@ -12,6 +12,7 @@ import com.sc7258.springshopflyway.domain.order.OrderRepository
 import com.sc7258.springshopflyway.domain.order.OrderStatus
 import com.sc7258.springshopflyway.model.CreateOrderRequest
 import com.sc7258.springshopflyway.model.OrderResponse
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -22,6 +23,8 @@ class OrderService(
     private val bookRepository: BookRepository,
     private val mockPaymentService: MockPaymentService
 ) {
+
+    private val log = LoggerFactory.getLogger(OrderService::class.java)
 
     @Transactional
     fun createOrder(email: String, request: CreateOrderRequest): Long {
@@ -55,10 +58,13 @@ class OrderService(
             mockPaymentService.processPayment(order.totalAmount)
             order.status = OrderStatus.PAID
         } catch (e: Exception) {
+            log.error("Payment failed for order of member: {}, amount: {}", email, order.totalAmount, e)
             throw PaymentFailedException("Payment failed: ${e.message}")
         }
 
-        return orderRepository.save(order).id!!
+        val savedOrder = orderRepository.save(order)
+        log.info("Order created: id={}, member={}, amount={}", savedOrder.id, email, savedOrder.totalAmount)
+        return savedOrder.id!!
     }
 
     @Transactional(readOnly = true)
@@ -84,6 +90,7 @@ class OrderService(
             throw InvalidInputException("Not authorized to cancel this order")
         }
 
+        log.info("Cancelling order: id={}, member={}", orderId, email)
         order.cancel()
         
         // 결제 취소

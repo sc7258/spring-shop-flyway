@@ -1,5 +1,6 @@
 package com.sc7258.springshopflyway.domain.catalog
 
+import com.sc7258.springshopflyway.common.exception.OutOfStockException
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -36,7 +37,7 @@ class Book(
     fun removeStock(quantity: Int) {
         val restStock = this.stockQuantity - quantity
         if (restStock < 0) {
-            throw IllegalStateException("need more stock") // TODO: Custom Exception
+            throw OutOfStockException("Need more stock. Current: $stockQuantity, Requested: $quantity")
         }
         this.stockQuantity = restStock
     }

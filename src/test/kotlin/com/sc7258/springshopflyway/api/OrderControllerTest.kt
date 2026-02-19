@@ -18,7 +18,7 @@ import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ActiveProfiles
@@ -52,7 +52,7 @@ class OrderControllerTest {
     @Autowired
     private lateinit var orderRepository: OrderRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var mockPaymentService: MockPaymentService
 
     private var book1Id: Long = 0
@@ -168,5 +168,60 @@ class OrderControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isNotFound)
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = ["USER"])
+    fun `재고가 부족하면 주문 생성 시 409를 반환한다`() {
+        val request = CreateOrderRequest(
+            orderItems = listOf(
+                CreateOrderRequestOrderItemsInner(bookId = book1Id, count = 100)
+            )
+        )
+
+        mockMvc.perform(
+            post("/api/v1/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+        )
+            .andExpect(status().isConflict)
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com", roles = ["USER"])
+    fun `결제 실패 시 500을 반환한다`() {
+        // Mocking payment failure
+        Mockito.`when`(mockPaymentService.processPayment(Mockito.anyInt()))
+            .thenThrow(RuntimeException("Payment Gateway Error"))
+
+        val request = CreateOrderRequest(
+            orderItems = listOf(
+                CreateOrderRequestOrderItemsInner(bookId = book1Id, count = 1)
+            )
+        )
+
+        mockMvc.perform(
+            post("/api/v1/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+        )
+            .andExpect(status().isInternalServerError)
+    }
+
+    @Test
+    @WithMockUser(username = "other@example.com", roles = ["USER"])
+    fun `다른 사용자의 주문을 취소할 수 없다`() {
+        // 주문 생성 (testMember 소유)
+        val order = Order(member = testMember)
+        val book1 = bookRepository.findById(book1Id).get()
+        order.addOrderItem(OrderItem(book = book1, orderPrice = 10000, count = 1))
+        val savedOrder = orderRepository.save(order)
+
+        // other@example.com으로 로그인하여 취소 시도
+        mockMvc.perform(
+            post("/api/v1/orders/${savedOrder.id}/cancel")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isBadRequest)
     }
 }

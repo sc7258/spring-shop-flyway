@@ -12,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 @Configuration
 @EnableWebSecurity
@@ -29,16 +28,17 @@ class SecurityConfig(
     fun webSecurityCustomizer(): WebSecurityCustomizer {
         return WebSecurityCustomizer { web ->
             web.ignoring().requestMatchers(
-                AntPathRequestMatcher("/h2-console/**"),
-                AntPathRequestMatcher("/favicon.ico"),
-                AntPathRequestMatcher("/error"),
-                AntPathRequestMatcher("/swagger-ui/**"),
-                AntPathRequestMatcher("/swagger-ui.html"),
-                AntPathRequestMatcher("/swagger-resources/**"),
-                AntPathRequestMatcher("/v3/api-docs/**"),
-                AntPathRequestMatcher("/api/v1/swagger-ui/**"),
-                AntPathRequestMatcher("/api/v1/swagger-ui.html"),
-                AntPathRequestMatcher("/api/v1/openapi.yaml") // 경로 변경
+                "/h2-console/**",
+                "/favicon.ico",
+                "/error",
+                "/swagger-ui/**",
+                "/swagger-ui.html",
+                "/swagger-resources/**",
+                "/v3/api-docs/**",
+                "/api/v1/swagger-ui/**",
+                "/api/v1/swagger-ui.html",
+                "/api/v1/openapi.yaml", // 경로 변경
+                "/actuator/**"
             )
         }
     }
@@ -50,9 +50,9 @@ class SecurityConfig(
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
                 it.requestMatchers(
-                    AntPathRequestMatcher("/api/v1/members/signup"),
-                    AntPathRequestMatcher("/api/v1/members/login"),
-                    AntPathRequestMatcher("/api/v1/books/**")
+                    "/api/v1/members/signup",
+                    "/api/v1/members/login",
+                    "/api/v1/books/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             }

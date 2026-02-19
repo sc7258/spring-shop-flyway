@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2026-02-19
+### Added
+- **Monitoring & Logging:**
+  - `spring-boot-starter-actuator` 의존성 추가 및 `health`, `info`, `metrics` 엔드포인트 활성화.
+  - `logback-spring.xml` 설정: Local/Test(Console), Prod(File JSON) 환경 분리.
+  - `net.logstash.logback:logstash-logback-encoder` 의존성 추가 (JSON 로그 포맷).
+  - 주요 비즈니스 로직(`OrderService`, `PaymentService`) 및 예외 처리(`GlobalExceptionHandler`)에 로깅 추가.
+- **Tests:**
+  - `OrderControllerTest`: 재고 부족, 결제 실패, 타인 주문 취소 시도에 대한 엣지 케이스 테스트 추가.
+  - `MemberControllerTest`: 중복 이메일 가입, 로그인 실패/성공에 대한 테스트 추가.
+  - `E2EIntegrationTest`: 회원가입부터 배송 조회까지의 전체 시나리오 통합 테스트 검증 완료.
+
+### Changed
+- **Refactoring:**
+  - `Book` Entity: 재고 부족 시 `IllegalStateException` 대신 `OutOfStockException`을 던지도록 수정.
+  - `SecurityConfig`: Actuator 엔드포인트(`/actuator/**`) 접근 허용 추가.
+
 ## [Unreleased]
 
 ### Added

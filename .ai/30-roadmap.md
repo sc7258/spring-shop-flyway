@@ -49,13 +49,13 @@ API First 및 TDD 방법론을 적용하여 단계적으로 기능을 확장합�
   - [x] Swagger UI 경로를 `/api/v1/swagger-ui.html`로 변경
   - [x] `servers` URL을 상대 경로(`/api/v1`)로 변경하여 환경 독립성 확보
   - [x] Error Handling Refactoring (표준 예외 처리)
-- [ ] **Test Coverage**
-  - [ ] 주요 비즈니스 로직(주문, 결제)의 엣지 케이스 테스트 보강
-  - [ ] 실패 시나리오(재고 부족, 결제 실패 등) 검증
-- [ ] **Monitoring & Logging**
-  - [ ] Spring Boot Actuator 설정 (Health Check, Metrics)
-  - [ ] Logback 설정 구체화 (File Appender, JSON Format)
-  - [ ] 주요 로직(주문, 결제)에 대한 구조화된 로그 남기기
+- [x] **Test Coverage**
+  - [x] 주요 비즈니스 로직(주문, 결제)의 엣지 케이스 테스트 보강
+  - [x] 실패 시나리오(재고 부족, 결제 실패 등) 검증
+- [x] **Monitoring & Logging**
+  - [x] Spring Boot Actuator 설정 (Health Check, Metrics)
+  - [x] Logback 설정 구체화 (File Appender, JSON Format)
+  - [x] 주요 로직(주문, 결제)에 대한 구조화된 로그 남기기
 
 ## Phase 6: Security & Administration (v0.6.0)
 **목표:** 인증 체계를 고도화하고, 관리자 기능을 추가하여 운영 효율성을 높인다.

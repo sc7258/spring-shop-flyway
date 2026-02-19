@@ -13,7 +13,7 @@ import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
@@ -38,7 +38,7 @@ class E2EIntegrationTest {
     @Autowired
     private lateinit var bookRepository: BookRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var mockPaymentService: MockPaymentService
 
     private var bookId: Long = 0

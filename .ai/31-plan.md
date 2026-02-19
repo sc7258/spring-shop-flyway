@@ -1,54 +1,37 @@
-# Phase 5 Implementation Plan: Stability & Monitoring
+# Phase 6 Implementation Plan: Security & Administration
 
-**목표:** 시스템의 안정성을 확보하고, 운영 가능한 수준의 모니터링 환경을 구축한다.
+**목표:** 인증 체계를 고도화하고, 관리자 기능을 추가하여 운영 효율성을 높인다.
 
-## 1. OpenAPI & Documentation (SSOT) - *Completed*
-### 1.1 Swagger UI 설정 개선
-- [x] **Configuration**: SpringDoc 비활성화, 정적 리소스 매핑.
-- [x] **Path Change**: `/api/v1/swagger-ui.html`로 변경.
-- [x] **Security**: `SecurityConfig`에 Swagger UI 경로 허용 추가.
+## 1. Keycloak Integration
+### 1.1 Infrastructure Setup
+- [ ] **Docker Compose**: Keycloak 컨테이너 추가 (`postgres` 의존성 확인).
+- [ ] **Realm Configuration**: `shop-realm` 생성 및 클라이언트 설정 (`spring-shop-app`).
+- [ ] **User & Role Setup**: 테스트용 사용자 및 `ROLE_ADMIN`, `ROLE_USER` 생성.
 
-### 1.2 Spec Refactoring & Quality
-- [x] **Servers**: `openapi.yaml`의 `servers` URL을 상대 경로(`/api/v1`)로 변경.
-- [x] **Error Codes**: 에러 코드 테이블을 `<details>` 태그로 감싸서 접을 수 있게 개선.
-- [x] **Error Handling Standardization**:
-  - `ErrorCode` Enum 및 `BusinessException` 생성.
-  - `GlobalExceptionHandler`에서 모든 예외를 `ErrorResponse`로 매핑.
-  - `ApiDelegateImpl`의 `try-catch` 제거 및 표준화.
+### 1.2 Spring Security Migration
+- [ ] **Dependencies**: `spring-boot-starter-oauth2-resource-server` 추가.
+- [ ] **Configuration**: `SecurityConfig`를 OAuth2 Resource Server 모드로 변경 (JWT Decoder 설정).
+- [ ] **Token Provider Removal**: 기존 `JwtTokenProvider`, `JwtAuthenticationFilter` 제거 (또는 Deprecated 처리).
 
-## 2. Test Coverage Enhancement
-### 2.1 Edge Case Testing
-- [ ] **Order Domain**:
-  - 재고 부족 시 주문 실패 테스트 (`OutOfStockException`).
-  - 결제 실패 시 주문 상태 롤백 테스트 (`PaymentFailedException`).
-  - 타인의 주문 취소 시도 시 권한 거부 테스트 (`InvalidInputException`).
-- [ ] **Member Domain**:
-  - 중복 이메일 가입 시도 테스트 (`DuplicateEmailException`).
-  - 잘못된 비밀번호 로그인 시도 테스트 (`LoginFailedException`).
+### 1.3 Verification
+- [ ] **Login Test**: Keycloak을 통해 발급받은 토큰으로 API 호출 성공 확인.
+- [ ] **Role Test**: `ROLE_USER` 권한으로 일반 API 접근 확인.
 
-### 2.2 Integration Testing
-- [ ] **Scenario Test**:
-  - 회원가입 -> 로그인 -> 도서 검색 -> 장바구니(향후) -> 주문 -> 배송 조회까지의 전체 흐름 검증.
+## 2. Admin API
+### 2.1 Role-Based Access Control (RBAC)
+- [ ] **Security Config**: `/api/v1/admin/**` 경로는 `ROLE_ADMIN`만 접근 가능하도록 설정.
+- [ ] **Annotation**: `@PreAuthorize("hasRole('ADMIN')")` 적용 검토.
 
-## 3. Monitoring & Logging
-### 3.1 Actuator Setup
-- [ ] **Dependency**: `spring-boot-starter-actuator` 추가.
-- [ ] **Configuration**:
-  - `management.endpoints.web.exposure.include=health,info,metrics` 설정.
-  - `SecurityConfig`에서 Actuator 엔드포인트 접근 제어 (Admin 권한 필요 여부 검토).
+### 2.2 Admin Features Implementation
+- [ ] **User Management**: 전체 회원 목록 조회, 특정 회원 강제 탈퇴 API.
+- [ ] **Book Management**: 도서 등록/수정/삭제 API를 Admin 전용으로 이동/보완.
+- [ ] **Order Management**: 전체 주문 목록 조회, 주문 강제 취소 API.
 
-### 3.2 Logging Strategy
-- [ ] **Logback Config**:
-  - `logback-spring.xml` 작성.
-  - Console Appender (개발용) 및 File Appender (운영용) 분리.
-  - JSON 포맷 로그 설정 (ELK 연동 대비).
-- [ ] **Business Logging**:
-  - `OrderService`: 주문 생성/취소 시 중요 정보(주문ID, 금액, 사용자ID) 로그 남기기.
-  - `PaymentService`: 결제 승인/실패 로그 남기기.
-  - `GlobalExceptionHandler`: 예외 발생 시 StackTrace와 함께 요청 정보 로그 남기기.
+### 2.3 Audit Logging
+- [ ] **Entity**: `AdminAuditLog` 엔티티 생성.
+- [ ] **Service**: 관리자 액션 발생 시 로그 저장 로직 구현.
+- [ ] **Aspect**: AOP를 활용하여 관리자 API 호출 시 자동으로 Audit Log 남기기 (선택 사항).
 
-## 4. Verification
-- [ ] **Final Check**:
-  - `./gradlew test` 실행하여 모든 테스트 통과 확인.
-  - `/actuator/health` 호출하여 시스템 상태 확인.
-  - 로그 파일 생성 및 포맷 확인.
+## 3. Final Verification
+- [ ] **Integration Test**: 관리자 권한으로 API 호출 시나리오 테스트.
+- [ ] **Access Denied Test**: 일반 사용자가 관리자 API 접근 시 403 Forbidden 확인.
