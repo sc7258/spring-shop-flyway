@@ -1,7 +1,6 @@
 package com.sc7258.springshopflyway.config
 
-import com.sc7258.springshopflyway.common.security.KeycloakJwtRolesConverter
-import org.springframework.beans.factory.annotation.Value
+import com.nimbusds.jwt.JWTParser
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -12,16 +11,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
+import org.springframework.security.oauth2.jwt.Jwt
+import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.web.SecurityFilterChain
+import java.time.Instant
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@Profile("!test")
-class SecurityConfig(
-    @Value("\${keycloak.client-id}") private val clientId: String
-) {
+@Profile("test")
+class TestSecurityConfig {
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {
@@ -34,15 +33,7 @@ class SecurityConfig(
             web.ignoring().requestMatchers(
                 "/h2-console/**",
                 "/favicon.ico",
-                "/error",
-                "/swagger-ui/**",
-                "/swagger-ui.html",
-                "/swagger-resources/**",
-                "/v3/api-docs/**",
-                "/api/v1/swagger-ui/**",
-                "/api/v1/swagger-ui.html",
-                "/api/v1/openapi.yaml",
-                "/actuator/**"
+                "/error"
             )
         }
     }
@@ -61,21 +52,43 @@ class SecurityConfig(
                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             }
-            .headers {
-                it.frameOptions { frameOptions -> frameOptions.disable() }
-            }
             .oauth2ResourceServer { oauth2 ->
-                oauth2.jwt { jwt ->
-                    jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())
-                }
+                oauth2.jwt { }
             }
 
         return http.build()
     }
 
-    private fun jwtAuthenticationConverter(): JwtAuthenticationConverter {
-        val converter = JwtAuthenticationConverter()
-        converter.setJwtGrantedAuthoritiesConverter(KeycloakJwtRolesConverter(clientId))
-        return converter
+    @Bean
+    fun jwtDecoder(): JwtDecoder {
+        return JwtDecoder { token ->
+            try {
+                // 실제 토큰 파싱 시도
+                val jwt = JWTParser.parse(token)
+                val claims = jwt.jwtClaimsSet.claims
+                val sub = claims["sub"] as? String ?: "user"
+                val scope = claims["scope"] as? String ?: "read"
+                
+                // 만료 시간 등은 테스트 편의를 위해 현재 시간 기준으로 재설정하거나 원본 사용
+                val now = Instant.now()
+                Jwt(
+                    token,
+                    now,
+                    now.plusSeconds(3600),
+                    mapOf("alg" to "none"),
+                    mapOf("sub" to sub, "scope" to scope)
+                )
+            } catch (e: Exception) {
+                // 파싱 실패 시 더미 토큰 반환 (기존 로직 유지)
+                val now = Instant.now()
+                Jwt(
+                    token,
+                    now,
+                    now.plusSeconds(3600),
+                    mapOf("alg" to "none"),
+                    mapOf("sub" to "user", "scope" to "read")
+                )
+            }
+        }
     }
 }

@@ -34,8 +34,189 @@ tags:
     description: 주문 관리 API
   - name: Delivery
     description: 배송 관리 API
+  - name: Admin
+    description: 관리자 전용 API
 
 paths:
+  /admin/members:
+    get:
+      tags:
+        - Admin
+      summary: 전체 회원 목록 조회 (관리자 전용)
+      operationId: getAllMembers
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberResponse'
+
+  /admin/members/{memberId}:
+    delete:
+      tags:
+        - Admin
+      summary: 회원 강제 탈퇴 (관리자 전용)
+      operationId: deleteMember
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: memberId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: 삭제 성공
+        '404':
+          description: 회원 없음
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /admin/orders:
+    get:
+      tags:
+        - Admin
+      summary: 전체 주문 목록 조회 (관리자 전용)
+      operationId: getAllOrders
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponse'
+
+  /admin/orders/{orderId}/cancel:
+    post:
+      tags:
+        - Admin
+      summary: 주문 강제 취소 (관리자 전용)
+      operationId: cancelOrderAdmin
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: 취소 성공
+        '404':
+          description: 주문 없음
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /admin/books:
+    post:
+      tags:
+        - Admin
+      summary: 도서 등록 (관리자 전용)
+      operationId: createBook
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookRequest'
+      responses:
+        '201':
+          description: 등록 성공
+          headers:
+            Location:
+              description: 생성된 도서 리소스 URI
+              schema:
+                type: string
+        '400':
+          description: 잘못된 입력
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: ISBN 중복
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /admin/books/{bookId}:
+    put:
+      tags:
+        - Admin
+      summary: 도서 수정 (관리자 전용)
+      operationId: updateBook
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBookRequest'
+      responses:
+        '200':
+          description: 수정 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookResponse'
+        '404':
+          description: 도서 없음
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Admin
+      summary: 도서 삭제 (관리자 전용)
+      operationId: deleteBook
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: 삭제 성공
+        '404':
+          description: 도서 없음
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /members/signup:
     post:
       tags:
@@ -338,7 +519,56 @@ components:
           type: string
           example: "eyJhbGciOiJIUz..."
 
+    MemberResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+
     # --- Catalog ---
+    CreateBookRequest:
+      type: object
+      required:
+        - title
+        - author
+        - price
+        - stockQuantity
+        - isbn
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        price:
+          type: integer
+        stockQuantity:
+          type: integer
+        isbn:
+          type: string
+        category:
+          type: string
+
+    UpdateBookRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        price:
+          type: integer
+        stockQuantity:
+          type: integer
+        category:
+          type: string
+
     BookResponse:
       type: object
       properties:

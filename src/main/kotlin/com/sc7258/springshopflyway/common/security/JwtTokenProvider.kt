@@ -15,6 +15,7 @@ import java.util.*
 import javax.crypto.SecretKey
 
 @Component
+@Deprecated("Use Keycloak OAuth2 instead")
 class JwtTokenProvider(
     private val userDetailsService: UserDetailsService
 ) {

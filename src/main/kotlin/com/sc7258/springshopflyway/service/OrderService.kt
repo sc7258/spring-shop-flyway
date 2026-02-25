@@ -81,6 +81,18 @@ class OrderService(
         }
     }
 
+    @Transactional(readOnly = true)
+    fun getAllOrders(): List<OrderResponse> {
+        return orderRepository.findAll().map { order ->
+            OrderResponse(
+                id = order.id,
+                status = order.status.name,
+                totalAmount = order.totalAmount,
+                orderedAt = java.time.OffsetDateTime.of(order.orderedAt, java.time.ZoneOffset.UTC)
+            )
+        }
+    }
+
     @Transactional
     fun cancelOrder(email: String, orderId: Long) {
         val order = orderRepository.findById(orderId)
@@ -94,6 +106,16 @@ class OrderService(
         order.cancel()
         
         // 결제 취소
+        mockPaymentService.cancelPayment(orderId.toString())
+    }
+
+    @Transactional
+    fun cancelOrderByAdmin(orderId: Long) {
+        val order = orderRepository.findById(orderId)
+            .orElseThrow { OrderNotFoundException("Order not found: $orderId") }
+
+        log.info("Admin cancelling order: id={}", orderId)
+        order.cancel()
         mockPaymentService.cancelPayment(orderId.toString())
     }
 }

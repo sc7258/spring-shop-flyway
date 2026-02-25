@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.GenericFilterBean
 
+@Deprecated("Use Keycloak OAuth2 instead")
 class JwtAuthenticationFilter(
     private val jwtTokenProvider: JwtTokenProvider
 ) : GenericFilterBean() {

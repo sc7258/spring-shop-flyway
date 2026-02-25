@@ -41,3 +41,9 @@ out/
 
 ### Log files ###
 logs/
+
+### Sensitive Files ###
+.env
+.env.local
+.env.dev
+.env.prod

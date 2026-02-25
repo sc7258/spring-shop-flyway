@@ -57,15 +57,16 @@ API First 및 TDD 방법론을 적용하여 단계적으로 기능을 확장합�
   - [x] Logback 설정 구체화 (File Appender, JSON Format)
   - [x] 주요 로직(주문, 결제)에 대한 구조화된 로그 남기기
 
-## Phase 6: Security & Administration (v0.6.0)
+## Phase 6: Security & Administration (v0.6.0) - In Progress
 **목표:** 인증 체계를 고도화하고, 관리자 기능을 추가하여 운영 효율성을 높인다.
 - [ ] **Keycloak Integration**
-  - [ ] Keycloak 컨테이너 설정 (Docker Compose)
-  - [ ] Spring Security OAuth2 Resource Server 설정
-  - [ ] 기존 JWT 인증 로직 마이그레이션
-- [ ] **Admin API**
-  - [ ] 관리자 권한(Role.ADMIN) 추가 및 접근 제어
-  - [ ] 관리자용 도서/회원/주문 관리 API 구현
+  - [x] Keycloak 컨테이너 설정 (Docker Compose)
+  - [x] Spring Security OAuth2 Resource Server 설정
+  - [ ] 기존 JWT 인증 로직 완전 마이그레이션 (레거시 로그인 경로 정리 포함)
+- [x] **Admin API**
+  - [x] 관리자 권한(Role.ADMIN) 추가 및 접근 제어
+  - [x] 관리자용 도서/회원/주문 관리 API 구현
+  - [x] 관리자 API 접근/권한 검증 테스트 추가
 
 ## Phase 7: User Engagement Features (v0.7.0)
 **목표:** 사용자의 참여를 유도하고 편의성을 높이는 기능을 추가한다.

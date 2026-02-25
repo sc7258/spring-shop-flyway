@@ -49,13 +49,13 @@
   - `status` (READY, COMP, CANCEL)
   - `address_city`, `address_street`, `address_zipcode` (배송지 주소)
 
-### 2.5 Administration (관리자) - *New (Phase 6)*
-- **`admin_audit_logs`** (Planned)
+### 2.5 Administration (관리자)
+- **`admin_audit_logs`**
   - `id` (PK)
   - `admin_id` (FK -> members.id)
-  - `action` (e.g., "CANCEL_ORDER", "BLOCK_USER")
-  - `target_id` (대상 리소스 ID)
-  - `details` (JSON or Text)
+  - `action` (e.g., "VIEW_ALL_MEMBERS", "CANCEL_ORDER")
+  - `target_id` (대상 리소스 ID, Optional)
+  - `details` (JSON Text, Arguments)
   - `created_at`
 
 ## 3. ER Diagram (Conceptual)

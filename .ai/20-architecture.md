@@ -29,22 +29,21 @@
 - **Response:** 클라이언트에게는 항상 표준화된 `ErrorResponse` 포맷(code, message, status)을 반환합니다.
 
 ### 3.2 Security & Authentication
-- **Current (Phase 1~5):** JWT 기반의 자체 인증(Custom Authentication)을 사용합니다.
-  - `JwtTokenProvider`를 통해 토큰 발급 및 검증.
-  - `UserDetailsService`를 구현하여 DB 기반 사용자 조회.
-- **Future (Phase 6+):** **Keycloak (OAuth2/OIDC)** 기반의 통합 인증으로 전환 예정.
-  - Spring Security OAuth2 Resource Server 설정.
-  - 사용자 정보 및 권한 관리를 Keycloak으로 위임.
+- **Current (Phase 6):** Spring Security **OAuth2 Resource Server** 기반으로 보호 API 인증을 처리합니다.
+  - `SecurityConfig`에서 JWT 인증 컨버터(`KeycloakJwtRolesConverter`)를 사용해 Keycloak Role을 `ROLE_*` 권한으로 매핑합니다.
+  - `/api/v1/admin/**`는 `ROLE_ADMIN` 권한이 필요하며, Admin Delegate에는 `@PreAuthorize("hasRole('ADMIN')")`를 적용합니다.
+- **Compatibility:** `MemberService.login`의 레거시 JWT 발급 경로(`JwtTokenProvider`)는 아직 남아 있으며, 완전 제거는 후속 정리 항목입니다.
 
 ### 3.3 Administration (Admin)
 - **Role-Based Access Control (RBAC):** `ROLE_ADMIN` 권한을 가진 사용자만 접근 가능한 별도의 API 그룹(`/api/v1/admin/**`)을 운영합니다.
 - **Audit Logging:** 관리자의 주요 활동(회원 차단, 주문 강제 취소 등)은 별도의 감사 로그(Audit Log)로 기록하여 추적성을 확보합니다.
+- **AOP Implementation:** `@AuditLog` 어노테이션과 Aspect를 사용하여 비즈니스 로직 침투 없이 감사 로그를 남깁니다.
 
 ## 4. Tech Components
 - **Web Server:** Tomcat (Spring Boot Embedded)
 - **Database:** H2 (Local/Test), PostgreSQL (Prod)
 - **Migration:** Flyway (DB 스키마 버전 관리)
-- **Security:** Spring Security + JWT (Stateless Authentication) -> Keycloak (Planned)
+- **Security:** Spring Security OAuth2 Resource Server (Keycloak JWT Role Mapping) + Legacy JWT Fallback (Migration 중)
 
 ## 5. Package Structure
 ```

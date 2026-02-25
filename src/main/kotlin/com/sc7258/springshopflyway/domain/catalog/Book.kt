@@ -8,13 +8,13 @@ import java.time.LocalDateTime
 @Table(name = "books")
 class Book(
     @Column(nullable = false)
-    val title: String,
+    var title: String,
 
     @Column(nullable = false)
-    val author: String,
+    var author: String,
 
     @Column(nullable = false)
-    val price: Int,
+    var price: Int,
 
     @Column(name = "stock_quantity", nullable = false)
     var stockQuantity: Int,
@@ -22,7 +22,7 @@ class Book(
     @Column(unique = true)
     val isbn: String? = null,
 
-    val category: String? = null,
+    var category: String? = null,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +34,21 @@ class Book(
     @Column(name = "updated_at")
     var updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
+    fun update(
+        title: String?,
+        author: String?,
+        price: Int?,
+        stockQuantity: Int?,
+        category: String?
+    ) {
+        if (title != null) this.title = title
+        if (author != null) this.author = author
+        if (price != null) this.price = price
+        if (stockQuantity != null) this.stockQuantity = stockQuantity
+        this.category = category
+        this.updatedAt = LocalDateTime.now()
+    }
+
     fun removeStock(quantity: Int) {
         val restStock = this.stockQuantity - quantity
         if (restStock < 0) {

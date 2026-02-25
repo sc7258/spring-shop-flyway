@@ -1,6 +1,7 @@
 package com.sc7258.springshopflyway.service
 
 import com.sc7258.springshopflyway.common.exception.DuplicateEmailException
+import com.sc7258.springshopflyway.common.exception.EntityNotFoundException
 import com.sc7258.springshopflyway.common.exception.LoginFailedException
 import com.sc7258.springshopflyway.common.security.JwtTokenProvider
 import com.sc7258.springshopflyway.domain.member.Address
@@ -8,6 +9,7 @@ import com.sc7258.springshopflyway.domain.member.Member
 import com.sc7258.springshopflyway.domain.member.MemberRepository
 import com.sc7258.springshopflyway.domain.member.Role
 import com.sc7258.springshopflyway.model.LoginRequest
+import com.sc7258.springshopflyway.model.MemberResponse
 import com.sc7258.springshopflyway.model.SignupRequest
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -19,6 +21,18 @@ class MemberService(
     private val passwordEncoder: PasswordEncoder,
     private val jwtTokenProvider: JwtTokenProvider
 ) {
+
+    @Transactional(readOnly = true)
+    fun getAllMembers(): List<MemberResponse> {
+        return memberRepository.findAll().map { member ->
+            MemberResponse(
+                id = member.id,
+                email = member.email,
+                name = member.name,
+                role = member.role.name
+            )
+        }
+    }
 
     @Transactional
     fun signup(signupRequest: SignupRequest): Long {
@@ -39,6 +53,13 @@ class MemberService(
         )
 
         return memberRepository.save(member).id!!
+    }
+
+    @Transactional
+    fun deleteMember(memberId: Long) {
+        val member = memberRepository.findById(memberId)
+            .orElseThrow { EntityNotFoundException("Member not found: $memberId") }
+        memberRepository.delete(member)
     }
 
     @Transactional(readOnly = true)
