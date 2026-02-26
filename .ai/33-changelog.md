@@ -56,7 +56,7 @@ All notable changes to this project will be documented in this file.
   - `SecurityConfig` 및 `WebConfig` 설정 개선.
   - OpenAPI `bearerAuth`를 Keycloak OAuth2 Authorization Code Flow로 전환하여 Swagger `Authorize` 버튼에서 OAuth 로그인 지원.
   - `application.yml`에 `springdoc.swagger-ui.oauth` 설정 추가 (`client-id`, PKCE, scopes).
-  - Swagger OAuth용 Public Client 분리(`intellian-app-flutter-client`) 및 `client-secret` 제거.
+  - Swagger OAuth용 Public Client 분리(`intellian-app-angular-client`) 및 `client-secret` 제거.
 - **Delivery Domain:**
   - `Delivery` Entity 및 Repository 구현.
   - 배송 생성 API (`POST /api/v1/deliveries`) 구현.

@@ -32,7 +32,7 @@
 ### 로컬 Keycloak (선택)
 로컬에서 Keycloak을 함께 사용할 경우, 애플리케이션(기본 `8080`)과 포트 충돌을 피하기 위해 **호스트 포트 `9090`**을 사용합니다.
 - Keycloak URL (Local): `http://localhost:9090`
-- Swagger OAuth Client ID(브라우저/Public): 기본값 `intellian-app-flutter-client`
+- Swagger OAuth Client ID(브라우저/Public): 기본값 `intellian-app-angular-client`
 - 상세 가이드: `docs/system-settings/keycloak-live-verification.md`
 
 ### 빌드 (Build)

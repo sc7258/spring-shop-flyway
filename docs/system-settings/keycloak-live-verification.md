@@ -27,7 +27,7 @@ docker ps --format "table {{.Names}}\t{{.Ports}}"
   - `ROLE_ADMIN` 사용자 1명
 - Keycloak Client 설정 확인 (클라이언트 분리)
   - API 서버용: `intellian-app-spring-client` (`confidential`)
-  - Swagger UI용: `intellian-app-flutter-client` (`public`)
+  - Swagger UI용: `intellian-app-angular-client` (`public`)
     - `Standard Flow` 활성화
     - PKCE 허용
     - Client Authentication 비활성화(= secret 미사용)
@@ -36,7 +36,7 @@ docker ps --format "table {{.Names}}\t{{.Ports}}"
 - 아래 환경변수 설정
   - `KEYCLOAK_AUTH_SERVER_URL`
   - `KEYCLOAK_CLIENT_SECRET`
-  - `SWAGGER_OAUTH_CLIENT_ID` (기본값: `intellian-app-flutter-client`)
+  - `SWAGGER_OAUTH_CLIENT_ID` (기본값: `intellian-app-angular-client`)
 
 ## Swagger OAuth Login
 Swagger UI에서 `Authorize` 버튼을 누르면 Keycloak 로그인 화면으로 이동하며, Google 연동이 설정된 경우 Google SSO 버튼을 통해 로그인할 수 있습니다.

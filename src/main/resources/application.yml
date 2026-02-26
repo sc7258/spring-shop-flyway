@@ -14,7 +14,7 @@ keycloak:
 swagger:
   oauth:
     # Swagger UI(브라우저) 전용 Public Client
-    client-id: ${SWAGGER_OAUTH_CLIENT_ID:intellian-app-flutter-client}
+    client-id: ${SWAGGER_OAUTH_CLIENT_ID:intellian-app-angular-client}
 
 spring:
   application:
