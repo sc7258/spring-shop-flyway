@@ -11,6 +11,11 @@ keycloak:
   client-secret: ${KEYCLOAK_CLIENT_SECRET} # 환경변수 사용
   auth-server-url: https://accounts-dev.intelliantech.com # 기본값 (Dev/Local/Test)
 
+swagger:
+  oauth:
+    # Swagger UI(브라우저) 전용 Public Client
+    client-id: ${SWAGGER_OAUTH_CLIENT_ID:intellian-app-flutter-client}
+
 spring:
   application:
     name: spring-shop-flyway
@@ -28,6 +33,10 @@ springdoc:
     url: /api/v1/openapi.yaml
     path: /api/v1/swagger-ui.html
     disable-swagger-default-url: true
+    oauth:
+      client-id: ${swagger.oauth.client-id}
+      use-pkce-with-authorization-code-grant: true
+      scopes: openid,profile,email
 
 ---
 # --- Local Profile ---

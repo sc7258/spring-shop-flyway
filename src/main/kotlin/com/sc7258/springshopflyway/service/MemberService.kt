@@ -2,8 +2,7 @@ package com.sc7258.springshopflyway.service
 
 import com.sc7258.springshopflyway.common.exception.DuplicateEmailException
 import com.sc7258.springshopflyway.common.exception.EntityNotFoundException
-import com.sc7258.springshopflyway.common.exception.LoginFailedException
-import com.sc7258.springshopflyway.common.security.JwtTokenProvider
+import com.sc7258.springshopflyway.common.security.LoginTokenIssuer
 import com.sc7258.springshopflyway.domain.member.Address
 import com.sc7258.springshopflyway.domain.member.Member
 import com.sc7258.springshopflyway.domain.member.MemberRepository
@@ -19,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 class MemberService(
     private val memberRepository: MemberRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val jwtTokenProvider: JwtTokenProvider
+    private val loginTokenIssuer: LoginTokenIssuer
 ) {
 
     @Transactional(readOnly = true)
@@ -64,13 +63,6 @@ class MemberService(
 
     @Transactional(readOnly = true)
     fun login(loginRequest: LoginRequest): String {
-        val member = memberRepository.findByEmail(loginRequest.email)
-            ?: throw LoginFailedException()
-
-        if (!passwordEncoder.matches(loginRequest.password, member.password)) {
-            throw LoginFailedException()
-        }
-
-        return jwtTokenProvider.createToken(member.email, member.role.name)
+        return loginTokenIssuer.issue(loginRequest.email, loginRequest.password)
     }
 }

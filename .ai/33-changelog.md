@@ -42,7 +42,10 @@ All notable changes to this project will be documented in this file.
   - `AdminApiDelegateImpl`: 관리자 도서/회원/주문 관리 엔드포인트(`createBook`, `updateBook`, `deleteBook`, `deleteMember`, `cancelOrderAdmin`) 구현.
   - `AdminApiDelegateImpl`: `@PreAuthorize("hasRole('ADMIN')")` 및 `@AuditLog` 액션 확장 적용.
   - `AdminControllerTest`: 관리자 API 통합 시나리오(관리자 접근 성공, 일반 사용자 403, 관리자 CRUD/강제취소) 추가.
+  - `LoginTokenIssuer` 도입: `/members/login` 토큰 발급을 Keycloak 위임(`KeycloakLoginTokenIssuer`)으로 전환하고 테스트 전용 스텁(`TestLoginTokenIssuer`) 추가.
+  - Keycloak 로컬 Realm/Client/User 구성 후 `verify-keycloak-e2e.ps1` 실행으로 실토큰 인증/권한 검증 통과.
 - **Documentation:**
+  - `docs/system-settings/keycloak-live-verification.md`: Keycloak 실토큰 기반 인증/인가 점검 절차 추가.
   - `30-roadmap.md` / `31-plan.md` / `32-todo.md`: Phase 6 진행상태 동기화 (`Admin API 완료`, `Keycloak 마이그레이션 정리/실토큰 검증 대기`).
   - `02-coding-conventions.md`: Exception Handling 규칙 추가.
   - `20-architecture.md`: Cross-Cutting Concerns (Exception Handling) 섹션 추가.
@@ -51,6 +54,9 @@ All notable changes to this project will be documented in this file.
   - OpenAPI SSOT 구축 (정적 파일 로드, 경로 변경).
   - Swagger UI 경로를 `/api/v1/swagger-ui.html`로 변경.
   - `SecurityConfig` 및 `WebConfig` 설정 개선.
+  - OpenAPI `bearerAuth`를 Keycloak OAuth2 Authorization Code Flow로 전환하여 Swagger `Authorize` 버튼에서 OAuth 로그인 지원.
+  - `application.yml`에 `springdoc.swagger-ui.oauth` 설정 추가 (`client-id`, PKCE, scopes).
+  - Swagger OAuth용 Public Client 분리(`intellian-app-flutter-client`) 및 `client-secret` 제거.
 - **Delivery Domain:**
   - `Delivery` Entity 및 Repository 구현.
   - 배송 생성 API (`POST /api/v1/deliveries`) 구현.
@@ -73,6 +79,10 @@ All notable changes to this project will be documented in this file.
   - `V2__insert_sample_books.sql`: 초기 샘플 도서 데이터(5권) 추가.
   - `CatalogIntegrationTest`: 도서 목록 및 상세 조회 통합 테스트 작성.
 - **Refactoring:**
+  - `MemberService`: `JwtTokenProvider` 의존 제거, `LoginTokenIssuer` 기반으로 로그인 흐름 전환.
+  - 레거시 JWT 구성 정리: `JwtTokenProvider`, `JwtAuthenticationFilter`, `CustomUserDetailsService` 삭제 및 `jjwt` 의존성 제거.
+  - `SecurityConfig`: Keycloak 토큰의 principal claim을 `preferred_username`으로 고정.
+  - `scripts/verify-keycloak-e2e.ps1`: 실토큰 기반 권한 검증 자동화 스크립트 추가.
   - `SecurityConfig`: package 선언 복구 및 `@EnableMethodSecurity` 적용.
   - `TestSecurityConfig`: `/api/v1/admin/**`에 `ROLE_ADMIN` 접근 제어 및 메서드 보안 활성화.
   - `Book` Entity: 관리자 수정 API 지원을 위한 필드 갱신 로직(`update`) 추가.

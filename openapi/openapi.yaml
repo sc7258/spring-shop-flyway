@@ -454,9 +454,16 @@ paths:
 components:
   securitySchemes:
     bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+      type: oauth2
+      description: Keycloak OAuth2 Authorization Code Flow (Google SSO via Keycloak)
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts-dev.intelliantech.com/realms/intellian-app/protocol/openid-connect/auth
+          tokenUrl: https://accounts-dev.intelliantech.com/realms/intellian-app/protocol/openid-connect/token
+          scopes:
+            openid: OpenID Connect scope
+            profile: Access user profile
+            email: Access user email
 
   schemas:
     # --- Common ---

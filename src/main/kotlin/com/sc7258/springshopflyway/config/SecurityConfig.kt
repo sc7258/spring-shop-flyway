@@ -75,6 +75,7 @@ class SecurityConfig(
 
     private fun jwtAuthenticationConverter(): JwtAuthenticationConverter {
         val converter = JwtAuthenticationConverter()
+        converter.setPrincipalClaimName("preferred_username")
         converter.setJwtGrantedAuthoritiesConverter(KeycloakJwtRolesConverter(clientId))
         return converter
     }

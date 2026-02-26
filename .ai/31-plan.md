@@ -12,11 +12,11 @@
  - [x] **Dependencies**: `spring-boot-starter-oauth2-resource-server` 추가.
  - [x] **Configuration**: `SecurityConfig`를 OAuth2 Resource Server 모드로 변경 (JWT Decoder 설정).
  - [x] **Token Provider Removal**: 기존 `JwtTokenProvider`, `JwtAuthenticationFilter` 제거 (또는 Deprecated 처리).
- - [ ] **Migration Cleanup**: 레거시 JWT 로그인 발급 경로(`MemberService.login`) 제거 또는 Keycloak 플로우로 완전 전환.
+ - [x] **Migration Cleanup**: 레거시 JWT 로그인 발급 경로(`MemberService.login`)를 `LoginTokenIssuer` 기반(Keycloak 위임)으로 전환.
 
 ### 1.3 Verification
-- [ ] **Login Test**: Keycloak을 통해 발급받은 토큰으로 API 호출 성공 확인.
-- [ ] **Role Test**: `ROLE_USER` 권한으로 일반 API 접근 확인.
+- [x] **Login Test**: Keycloak을 통해 발급받은 토큰으로 API 호출 성공 확인.
+- [x] **Role Test**: `ROLE_USER` 권한으로 일반 API 접근 확인.
 
 ## 2. Admin API
  ### 2.1 Role-Based Access Control (RBAC)

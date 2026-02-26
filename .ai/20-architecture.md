@@ -32,7 +32,7 @@
 - **Current (Phase 6):** Spring Security **OAuth2 Resource Server** 기반으로 보호 API 인증을 처리합니다.
   - `SecurityConfig`에서 JWT 인증 컨버터(`KeycloakJwtRolesConverter`)를 사용해 Keycloak Role을 `ROLE_*` 권한으로 매핑합니다.
   - `/api/v1/admin/**`는 `ROLE_ADMIN` 권한이 필요하며, Admin Delegate에는 `@PreAuthorize("hasRole('ADMIN')")`를 적용합니다.
-- **Compatibility:** `MemberService.login`의 레거시 JWT 발급 경로(`JwtTokenProvider`)는 아직 남아 있으며, 완전 제거는 후속 정리 항목입니다.
+- **Login Flow:** `/api/v1/members/login`은 `LoginTokenIssuer`를 통해 Keycloak 토큰 발급 엔드포인트로 위임합니다. 테스트 프로필은 `TestLoginTokenIssuer`로 스텁 토큰을 발급합니다.
 
 ### 3.3 Administration (Admin)
 - **Role-Based Access Control (RBAC):** `ROLE_ADMIN` 권한을 가진 사용자만 접근 가능한 별도의 API 그룹(`/api/v1/admin/**`)을 운영합니다.
@@ -43,7 +43,7 @@
 - **Web Server:** Tomcat (Spring Boot Embedded)
 - **Database:** H2 (Local/Test), PostgreSQL (Prod)
 - **Migration:** Flyway (DB 스키마 버전 관리)
-- **Security:** Spring Security OAuth2 Resource Server (Keycloak JWT Role Mapping) + Legacy JWT Fallback (Migration 중)
+- **Security:** Spring Security OAuth2 Resource Server (Keycloak JWT Role Mapping)
 
 ## 5. Package Structure
 ```

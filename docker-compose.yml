@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: dev-postgres
+    container_name: local-postgres
     ports:
       - "5432:5432"
     environment:
@@ -16,13 +14,13 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:23.0.0
-    container_name: dev-keycloak
+    container_name: local-keycloak
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     command: start-dev
     ports:
-      - "8080:8080"
+      - "9090:8080" # App(8080)와 충돌 방지: Host 9090 -> Container 8080
     depends_on:
       - postgres
     restart: always

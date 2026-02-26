@@ -68,6 +68,8 @@ class TestSecurityConfig {
                 val claims = jwt.jwtClaimsSet.claims
                 val sub = claims["sub"] as? String ?: "user"
                 val scope = claims["scope"] as? String ?: "read"
+                val preferredUsername = claims["preferred_username"] as? String ?: sub
+                val email = claims["email"] as? String ?: sub
                 
                 // 만료 시간 등은 테스트 편의를 위해 현재 시간 기준으로 재설정하거나 원본 사용
                 val now = Instant.now()
@@ -76,7 +78,12 @@ class TestSecurityConfig {
                     now,
                     now.plusSeconds(3600),
                     mapOf("alg" to "none"),
-                    mapOf("sub" to sub, "scope" to scope)
+                    mapOf(
+                        "sub" to sub,
+                        "scope" to scope,
+                        "preferred_username" to preferredUsername,
+                        "email" to email
+                    )
                 )
             } catch (e: Exception) {
                 // 파싱 실패 시 더미 토큰 반환 (기존 로직 유지)
@@ -86,7 +93,12 @@ class TestSecurityConfig {
                     now,
                     now.plusSeconds(3600),
                     mapOf("alg" to "none"),
-                    mapOf("sub" to "user", "scope" to "read")
+                    mapOf(
+                        "sub" to "user",
+                        "scope" to "read",
+                        "preferred_username" to "user",
+                        "email" to "user@example.com"
+                    )
                 )
             }
         }
