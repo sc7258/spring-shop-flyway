@@ -48,6 +48,8 @@ All notable changes to this project will be documented in this file.
   - `docs/system-settings/keycloak-live-verification.md`: Keycloak 실토큰 기반 인증/인가 점검 절차 추가.
   - `docs/trouble-shootings/swagger-auth-flow.md`: Swagger/OpenAPI 노출 구조와 OAuth(PKCE) 처리 방식, 주요 장애 대응 절차 정리.
   - `docs/trouble-shootings/spring-boot-swagger-static-openapi-guide.md`: 타 Spring Boot 프로젝트에 재사용 가능한 Swagger 정적 OpenAPI 구성 가이드 추가.
+  - `docs/trouble-shootings/openapi-error-and-exception-handling-guide.md`: OpenAPI 에러 명세 관리와 코드 예외 처리 패턴을 타 프로젝트 재사용 관점으로 정리.
+  - `docs/trouble-shootings/error-catalog-and-matrix-template.md`: 발생 가능 오류 사전 나열을 위한 에러 코드 카탈로그/API 매트릭스 템플릿 추가.
   - `30-roadmap.md` / `31-plan.md` / `32-todo.md`: Phase 6 진행상태 동기화 (`Admin API 완료`, `Keycloak 마이그레이션 정리/실토큰 검증 대기`).
   - `02-coding-conventions.md`: Exception Handling 규칙 추가.
   - `20-architecture.md`: Cross-Cutting Concerns (Exception Handling) 섹션 추가.

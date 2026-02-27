@@ -86,3 +86,5 @@ java -jar build/libs/spring-shop-flyway-0.2.0.jar
 - Swagger UI: [http://localhost:8080/api/v1/swagger-ui.html](http://localhost:8080/api/v1/swagger-ui.html)
 - Swagger 처리 방식/트러블슈팅: `docs/trouble-shootings/swagger-auth-flow.md`
 - Spring Boot 공통 설정 가이드: `docs/trouble-shootings/spring-boot-swagger-static-openapi-guide.md`
+- OpenAPI 에러/예외 처리 공통 가이드: `docs/trouble-shootings/openapi-error-and-exception-handling-guide.md`
+- 오류 사전 나열 템플릿: `docs/trouble-shootings/error-catalog-and-matrix-template.md`

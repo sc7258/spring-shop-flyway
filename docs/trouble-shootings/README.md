@@ -6,3 +6,7 @@
   - `swagger-auth-flow.md`
 - Spring Boot 공통 적용 가이드:
   - `spring-boot-swagger-static-openapi-guide.md`
+- OpenAPI 에러 명세 + 예외 처리 공통 가이드:
+  - `openapi-error-and-exception-handling-guide.md`
+- 오류 사전 나열 템플릿:
+  - `error-catalog-and-matrix-template.md`
