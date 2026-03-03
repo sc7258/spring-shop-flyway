@@ -5,20 +5,22 @@
 > 다음 Phase / Future Works / Backlog 항목을 여기에 추가하지 않습니다.
 > 다음 단계 계획은 `30-roadmap.md`에 기록합니다.
 
-## Current Phase: Phase 8 - Database & Environment Alignment
+## Current Phase: Phase 9 - Performance & Optimization
 
-### 1. MariaDB Migration
-- [ ] PostgreSQL 의존성과 실행 가이드를 MariaDB 기준으로 전환
-- [ ] Flyway 마이그레이션과 JPA 설정을 MariaDB 기준으로 검증
-- [ ] Docker Compose 및 개발용 DB 부트스트랩을 MariaDB 기준으로 재구성
+### 1. jOOQ Integration
+- [ ] jOOQ 설정 및 코드 생성 환경 구축
+- [ ] 복잡한 조회 쿼리(Catalog 검색 등)를 jOOQ로 리팩토링
 
-### 2. Environment Profile Strategy
-- [ ] `local` 프로필 제거
-- [ ] `dev` / `qa` / `prod` 3단계 프로필 재구성
-- [ ] 환경별 설정 차이와 운영 절차 문서화
+### 2. Performance Tuning
+- [ ] N+1 문제 해결 및 인덱싱 최적화
+- [ ] 성능 테스트 수행 및 병목 지점 개선
 
 ---
 ## Done
+- [x] **Phase 8 - Database & Environment Alignment**
+  - **MariaDB Migration**: Gradle 의존성, Flyway 확장, Docker Compose, 실행 가이드를 MariaDB 기준으로 전환.
+  - **Profiles**: `local` 제거 후 `dev` / `qa` / `prod` / `test` 구조로 재구성.
+  - **Verification**: MariaDB 컨테이너 연결 확인, `dev` 프로필 부팅 확인, `qa` / `prod` 설정 컨텍스트 테스트 추가 및 전체 테스트 통과.
 - [x] **Phase 7 - User Engagement Features**
   - **Cart**: 장바구니 담기/수정/삭제/조회 API 구현 및 검증 완료.
   - **Review**: 구매 사용자 리뷰 작성 및 도서별 공개 리뷰 목록 조회 API 구현.

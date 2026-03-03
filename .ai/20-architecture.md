@@ -22,6 +22,8 @@
 
 ### 2.4 Infrastructure Layer (`infrastructure`)
 - DB 구현체(JpaRepository), 외부 API 호출, 메시징 시스템 등 실제 기술적인 구현을 담당합니다.
+- 런타임 프로파일은 `dev`, `qa`, `prod` 3단계로 운영하며, `test`는 별도 검증용 프로파일로 유지합니다.
+- 프로파일별 추가 환경변수는 `dev -> .env.dev`, `qa -> .env.qa`, `prod -> .env.prod`로 로드하고 `test`는 `.env`를 로드하지 않습니다.
 
 ## 3. Cross-Cutting Concerns (공통 관심사)
 ### 3.1 Exception Handling
@@ -42,7 +44,7 @@
 
 ## 4. Tech Components
 - **Web Server:** Tomcat (Spring Boot Embedded)
-- **Database:** H2 (Local/Test), PostgreSQL (Prod)
+- **Database:** MariaDB (`dev` / `qa` / `prod`), H2 (`test`)
 - **Migration:** Flyway (DB 스키마 버전 관리)
 - **Security:** Spring Security OAuth2 Resource Server (Keycloak JWT Role Mapping)
 

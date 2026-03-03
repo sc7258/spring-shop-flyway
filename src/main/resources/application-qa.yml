@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://${DB_HOST:qa-db-host}:${DB_PORT:3306}/${DB_NAME:TEST_SAMPLE_DB}
+    username: ${DB_USERNAME:shop}
+    password: ${DB_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    show-sql: false
+
+keycloak:
+  auth-server-url: ${KEYCLOAK_AUTH_SERVER_URL:https://accounts-qa.intelliantech.com}

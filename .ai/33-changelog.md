@@ -47,6 +47,12 @@ All notable changes to this project will be documented in this file.
   - `openapi.yaml`에 Cart / Review / Wishlist 엔드포인트와 DTO 스키마 추가 및 OpenAPI 생성 코드 확장.
 - **Security:**
   - `SecurityConfig`, `TestSecurityConfig`에서 `GET /api/v1/books/**`만 공개하고 리뷰 작성은 인증이 필요하도록 조정.
+- **Database & Environment Alignment:**
+  - `build.gradle.kts`에서 PostgreSQL 드라이버/Flyway 확장을 MariaDB 기준(`mariadb-java-client`, `flyway-mysql`)으로 전환.
+  - `application.yml` 공통 설정과 `application-dev.yml`, `application-qa.yml`, `application-prod.yml`, `application-test.yml` 프로파일 파일을 분리.
+  - `docker-compose.yml`을 MariaDB 개발 컨테이너 기준으로 재구성하고 `dev` 기본 프로필 전략을 도입.
+  - `V1__init_schema.sql`, `V3__create_admin_audit_logs_table.sql`, `V4__create_phase7_tables.sql`의 PK DDL을 `AUTO_INCREMENT` 기준으로 정리해 MariaDB/H2 호환성 확보.
+  - `ProfileConfigurationTest` 추가로 `qa` / `prod` 프로필 설정 로딩을 검증하고, `dev` 프로필은 실제 MariaDB 컨테이너 연결 및 부팅으로 확인.
 - **Security & Administration:**
   - `AdminApiDelegateImpl`: 관리자 도서/회원/주문 관리 엔드포인트(`createBook`, `updateBook`, `deleteBook`, `deleteMember`, `cancelOrderAdmin`) 구현.
   - `AdminApiDelegateImpl`: `@PreAuthorize("hasRole('ADMIN')")` 및 `@AuditLog` 액션 확장 적용.
@@ -56,6 +62,9 @@ All notable changes to this project will be documented in this file.
 - **Documentation:**
   - `.ai/03-rules.md`, `.ai/README.md`, `.ai/commands/sync-status.md`: 현재 활성 Phase만 `31-plan.md`/`32-todo.md`에서 관리하도록 문서 경계 규칙 강화.
   - `30-roadmap.md` / `31-plan.md` / `32-todo.md`: `!sync` 기준으로 현재 활성 Phase를 `Phase 8 - Database & Environment Alignment`로 재정렬하고 세부 계획 재작성.
+  - `README.md`, `docs/system-settings/README.md`, `docs/system-settings/mariadb-dev-setup.md`: MariaDB 기반 `dev` 실행 가이드와 `.env.local` 주의사항 반영.
+  - `.env.example`, `.env.qa`, `README.md`, `.ai/01-tech-stack.md`, `.ai/20-architecture.md`: `.env.dev` / `.env.qa` / `.env.prod` 프로파일 정책과 `test` 비사용 정책을 명시.
+  - `docs/trouble-shootings/spring-profile-and-dotenv-guide.md`: `application.yml`, `application-*.yml`, `.env`, `.env.*`의 실제 로딩 순서와 역할을 상세 정리.
   - `docs/system-settings/keycloak-live-verification.md`: Keycloak 실토큰 기반 인증/인가 점검 절차 추가.
   - `docs/trouble-shootings/swagger-auth-flow.md`: Swagger/OpenAPI 노출 구조와 OAuth(PKCE) 처리 방식, 주요 장애 대응 절차 정리.
   - `docs/trouble-shootings/spring-boot-swagger-static-openapi-guide.md`: 타 Spring Boot 프로젝트에 재사용 가능한 Swagger 정적 OpenAPI 구성 가이드 추가.

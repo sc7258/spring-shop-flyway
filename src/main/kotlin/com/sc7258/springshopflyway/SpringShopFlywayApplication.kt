@@ -8,33 +8,71 @@ import org.springframework.boot.runApplication
 class SpringShopFlywayApplication
 
 fun main(args: Array<String>) {
-    // 1. 활성 프로파일 확인 (시스템 프로퍼티 또는 환경변수)
-    val activeProfile = System.getProperty("spring.profiles.active") 
-        ?: System.getenv("SPRING_PROFILES_ACTIVE") 
-        ?: "local" // 기본값
+    val activeProfile = resolveActiveProfile(
+        args = args,
+        systemProperty = System.getProperty("spring.profiles.active"),
+        environmentVariable = System.getenv("SPRING_PROFILES_ACTIVE")
+    )
 
-    // 2. 프로파일에 맞는 .env 파일명 결정
-    val envFileName = when (activeProfile) {
-        "prod" -> ".env.prod"
-        "dev" -> ".env.dev"
-        else -> ".env.local"
-    }
+    val envFileName = resolveEnvFileName(activeProfile)
 
-    // 3. 해당 .env 파일 로드 (있을 경우에만)
-    try {
-        val dotenv = Dotenv.configure()
-            .filename(envFileName) // 파일명 지정
-            .ignoreIfMissing()
-            .load()
-            
-        dotenv.entries().forEach { entry ->
-            System.setProperty(entry.key, entry.value)
+    if (envFileName != null) {
+        try {
+            val dotenv = Dotenv.configure()
+                .filename(envFileName)
+                .ignoreIfMissing()
+                .load()
+
+            dotenv.entries().forEach { entry ->
+                System.setProperty(entry.key, entry.value)
+            }
+            println("Loaded environment variables from: $envFileName")
+        } catch (e: Exception) {
+            println("Skipped loading environment variables from: $envFileName (File not found or error)")
         }
-        println("Loaded environment variables from: $envFileName")
-    } catch (e: Exception) {
-        // 파일이 없거나 로드 실패 시 무시 (운영 환경 등에서는 환경변수 직접 사용 가능)
-        println("Skipped loading environment variables from: $envFileName (File not found or error)")
+    } else {
+        println("Skipped loading environment variables for profile: $activeProfile")
     }
     
     runApplication<SpringShopFlywayApplication>(*args)
+}
+
+internal fun resolveActiveProfile(
+    args: Array<String>,
+    systemProperty: String?,
+    environmentVariable: String?
+): String {
+    return parseProfileFromArgs(args)
+        ?: extractPrimaryProfile(systemProperty)
+        ?: extractPrimaryProfile(environmentVariable)
+        ?: "dev"
+}
+
+internal fun resolveEnvFileName(activeProfile: String): String? {
+    return when (activeProfile) {
+        "dev" -> ".env.dev"
+        "qa" -> ".env.qa"
+        "prod" -> ".env.prod"
+        else -> null
+    }
+}
+
+private fun parseProfileFromArgs(args: Array<String>): String? {
+    args.forEachIndexed { index, arg ->
+        if (arg.startsWith("--spring.profiles.active=")) {
+            return extractPrimaryProfile(arg.substringAfter("="))
+        }
+        if (arg == "--spring.profiles.active" && index + 1 < args.size) {
+            return extractPrimaryProfile(args[index + 1])
+        }
+    }
+    return null
+}
+
+private fun extractPrimaryProfile(value: String?): String? {
+    return value
+        ?.split(",")
+        ?.firstOrNull()
+        ?.trim()
+        ?.takeIf { it.isNotEmpty() }
 }

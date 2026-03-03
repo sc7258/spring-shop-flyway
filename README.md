@@ -8,26 +8,22 @@
 - JDK 17 이상
 - Docker 및 Docker Compose
 
-### 데이터베이스 설정 (로컬 개발 환경)
+### 데이터베이스 설정 (Dev 환경)
 
-1. **PostgreSQL 컨테이너 실행**
+1. **MariaDB 컨테이너 실행**
    ```bash
    docker-compose up -d
    ```
 
-2. **데이터베이스 생성**
-   ```bash
-   # 컨테이너에 접속하여 'shopdb' 데이터베이스 생성
-   docker exec -it local-postgres psql -U postgres -c "CREATE DATABASE shopdb;"
-   ```
-
-3. **연결 정보 확인**
+2. **연결 정보 확인**
    - 호스트: `localhost`
-   - 포트: `5432`
-   - 데이터베이스: `shopdb`
-   - 사용자명: `postgres`
+   - 포트: `3306`
+   - 데이터베이스: `TEST_SAMPLE_DB`
+   - 사용자명: `shop`
    - 비밀번호: `password`
-   - 상세 가이드: `docs/system-settings/postgres-local-setup.md`
+   - 기본 프로필: `dev`
+   - 상세 가이드: `docs/system-settings/mariadb-dev-setup.md`
+   - `dev` 실행 시 `.env.dev`를 사용한다면 `DB_USERNAME=shop`, `DB_PASSWORD=password`로 맞춥니다.
 
 ### 로컬 Keycloak (선택)
 로컬에서 Keycloak을 함께 사용할 경우, 애플리케이션(기본 `8080`)과 포트 충돌을 피하기 위해 **호스트 포트 `9090`**을 사용합니다.
@@ -75,12 +71,27 @@
 ### 실행 (Run)
 애플리케이션을 시작하려면 다음 명령어를 사용합니다:
 ```bash
-./gradlew bootRun
+./gradlew bootRun --args='--spring.profiles.active=dev'
 ```
 또는 빌드된 jar 파일을 직접 실행할 수도 있습니다:
 ```bash
-java -jar build/libs/spring-shop-flyway-0.2.0.jar
+java -jar build/libs/spring-shop-flyway-0.2.0.jar --spring.profiles.active=dev
 ```
+
+### 실행 프로필 (Profiles)
+- `dev`: 기본 프로필. 로컬 MariaDB와 개발용 Keycloak 설정을 사용합니다.
+- `qa`: QA 환경용 MariaDB/Keycloak 주소를 사용합니다.
+- `prod`: 운영 환경용 MariaDB/Keycloak 주소를 사용합니다.
+- `test`: 자동 테스트 전용 프로필입니다.
+- `.env` 파일 사용 시 프로필별로 `.env.dev`, `.env.qa`, `.env.prod`만 읽습니다.
+- 파일명 `.env`와 `.env.local`은 현재 애플리케이션 로딩 대상이 아닙니다.
+
+### 환경변수 파일 정책
+- `dev`: `.env.dev`
+- `qa`: `.env.qa`
+- `prod`: `.env.prod`
+- `test`: `.env` 파일을 읽지 않고 `application-test.yml`만 사용
+- 시작점 예시는 `.env.example`을 복사해 프로필별 파일로 만드는 방식으로 관리합니다.
 
 ### API 문서 (API Documentation)
 - Swagger UI: [http://localhost:8080/api/v1/swagger-ui.html](http://localhost:8080/api/v1/swagger-ui.html)

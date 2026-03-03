@@ -1,5 +1,5 @@
 CREATE TABLE admin_audit_logs (
-    id BIGSERIAL PRIMARY KEY,
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     admin_id BIGINT NOT NULL,
     action VARCHAR(255) NOT NULL,
     target_id VARCHAR(255),

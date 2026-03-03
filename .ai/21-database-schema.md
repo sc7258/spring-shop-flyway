@@ -1,9 +1,10 @@
 # Database Schema Design
 
 ## 1. Overview
-- **Naming Convention:** snake_case (PostgreSQL 호환성 고려)
+- **Naming Convention:** snake_case (MariaDB 호환성 고려)
 - **Primary Key:** `bigint` (Auto Increment)
 - **Audit:** 모든 테이블에 `created_at`, `updated_at` 컬럼 포함 (JPA Auditing)
+- **Runtime Database:** `dev` / `qa` / `prod`는 MariaDB를 사용하고, `test`는 H2(MariaDB 호환 모드)를 사용합니다.
 
 ## 2. Tables & Relationships
 
