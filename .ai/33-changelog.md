@@ -74,6 +74,10 @@ All notable changes to this project will be documented in this file.
   - `02-coding-conventions.md`: Exception Handling 규칙 추가.
   - `20-architecture.md`: Cross-Cutting Concerns (Exception Handling) 섹션 추가.
   - `openapi.yaml`: 에러 코드 테이블을 `<details>` 태그로 감싸서 가독성 개선.
+- **Persistence Auditing:**
+  - `JpaAuditingConfig`, `BaseTimeEntity` 추가로 `created_at`, `updated_at` 공통 audit 모델 도입.
+  - `Member`, `Book`, `Order`, `OrderItem`, `Delivery`, `CartItem`, `Review`, `Wishlist` 엔티티를 JPA Auditing 기반으로 전환.
+  - `JpaAuditingIntegrationTest` 추가로 insert/update 시각 자동 설정 및 갱신 동작 검증.
 - **OpenAPI & Swagger:**
   - OpenAPI SSOT 구축 (정적 파일 로드, 경로 변경).
   - Swagger UI 경로를 `/api/v1/swagger-ui.html`로 변경.

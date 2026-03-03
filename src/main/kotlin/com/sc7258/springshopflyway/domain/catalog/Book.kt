@@ -1,8 +1,8 @@
 package com.sc7258.springshopflyway.domain.catalog
 
 import com.sc7258.springshopflyway.common.exception.OutOfStockException
+import com.sc7258.springshopflyway.common.persistence.BaseTimeEntity
 import jakarta.persistence.*
-import java.time.LocalDateTime
 
 @Entity
 @Table(name = "books")
@@ -26,14 +26,8 @@ class Book(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
-
-    @Column(name = "created_at", updatable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-
-    @Column(name = "updated_at")
-    var updatedAt: LocalDateTime = LocalDateTime.now()
-) {
+    val id: Long? = null
+) : BaseTimeEntity() {
     fun update(
         title: String?,
         author: String?,
@@ -46,7 +40,6 @@ class Book(
         if (price != null) this.price = price
         if (stockQuantity != null) this.stockQuantity = stockQuantity
         this.category = category
-        this.updatedAt = LocalDateTime.now()
     }
 
     fun removeStock(quantity: Int) {

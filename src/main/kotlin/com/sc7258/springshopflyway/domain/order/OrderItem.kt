@@ -1,8 +1,8 @@
 package com.sc7258.springshopflyway.domain.order
 
+import com.sc7258.springshopflyway.common.persistence.BaseTimeEntity
 import com.sc7258.springshopflyway.domain.catalog.Book
 import jakarta.persistence.*
-import java.time.LocalDateTime
 
 @Entity
 @Table(name = "order_items")
@@ -19,14 +19,8 @@ class OrderItem(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
-
-    @Column(name = "created_at", updatable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-
-    @Column(name = "updated_at")
-    var updatedAt: LocalDateTime = LocalDateTime.now()
-) {
+    val id: Long? = null
+) : BaseTimeEntity() {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     var order: Order? = null

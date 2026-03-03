@@ -21,6 +21,8 @@
   - **MariaDB Migration**: Gradle 의존성, Flyway 확장, Docker Compose, 실행 가이드를 MariaDB 기준으로 전환.
   - **Profiles**: `local` 제거 후 `dev` / `qa` / `prod` / `test` 구조로 재구성.
   - **Verification**: MariaDB 컨테이너 연결 확인, `dev` 프로필 부팅 확인, `qa` / `prod` 설정 컨텍스트 테스트 추가 및 전체 테스트 통과.
+  - **Persistence Consistency**: `JpaAuditingConfig`, `BaseTimeEntity` 도입으로 audit timestamp를 공통화하고 수동 timestamp 갱신 로직을 제거.
+  - **Verification**: `JpaAuditingIntegrationTest` 추가 및 전체 테스트 통과.
 - [x] **Phase 7 - User Engagement Features**
   - **Cart**: 장바구니 담기/수정/삭제/조회 API 구현 및 검증 완료.
   - **Review**: 구매 사용자 리뷰 작성 및 도서별 공개 리뷰 목록 조회 API 구현.

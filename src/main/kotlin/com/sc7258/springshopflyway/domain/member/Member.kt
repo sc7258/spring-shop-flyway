@@ -1,7 +1,7 @@
 package com.sc7258.springshopflyway.domain.member
 
+import com.sc7258.springshopflyway.common.persistence.BaseTimeEntity
 import jakarta.persistence.*
-import java.time.LocalDateTime
 
 @Entity
 @Table(name = "members")
@@ -24,14 +24,8 @@ class Member(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
-
-    @Column(name = "created_at", updatable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-
-    @Column(name = "updated_at")
-    var updatedAt: LocalDateTime = LocalDateTime.now()
-)
+    val id: Long? = null
+) : BaseTimeEntity()
 
 enum class Role {
     USER, ADMIN

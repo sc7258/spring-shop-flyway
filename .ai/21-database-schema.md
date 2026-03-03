@@ -3,7 +3,8 @@
 ## 1. Overview
 - **Naming Convention:** snake_case (MariaDB 호환성 고려)
 - **Primary Key:** `bigint` (Auto Increment)
-- **Audit:** 모든 테이블에 `created_at`, `updated_at` 컬럼 포함 (JPA Auditing)
+- **Audit:** 주요 도메인 테이블은 `created_at`, `updated_at` 컬럼을 포함하고 Spring Data JPA Auditing으로 관리합니다.
+- **Exception:** `admin_audit_logs`는 append-only 로그 테이블이므로 `created_at`만 유지합니다.
 - **Runtime Database:** `dev` / `qa` / `prod`는 MariaDB를 사용하고, `test`는 H2(MariaDB 호환 모드)를 사용합니다.
 
 ## 2. Tables & Relationships

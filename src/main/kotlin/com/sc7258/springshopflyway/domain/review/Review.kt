@@ -1,9 +1,9 @@
 package com.sc7258.springshopflyway.domain.review
 
+import com.sc7258.springshopflyway.common.persistence.BaseTimeEntity
 import com.sc7258.springshopflyway.domain.catalog.Book
 import com.sc7258.springshopflyway.domain.member.Member
 import jakarta.persistence.*
-import java.time.LocalDateTime
 
 @Entity
 @Table(
@@ -29,11 +29,5 @@ class Review(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
-
-    @Column(name = "created_at", updatable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-
-    @Column(name = "updated_at")
-    var updatedAt: LocalDateTime = LocalDateTime.now()
-)
+    val id: Long? = null
+) : BaseTimeEntity()

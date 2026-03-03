@@ -1,9 +1,9 @@
 package com.sc7258.springshopflyway.domain.delivery
 
+import com.sc7258.springshopflyway.common.persistence.BaseTimeEntity
 import com.sc7258.springshopflyway.domain.member.Address
 import com.sc7258.springshopflyway.domain.order.Order
 import jakarta.persistence.*
-import java.time.LocalDateTime
 
 @Entity
 @Table(name = "deliveries")
@@ -24,14 +24,8 @@ class Delivery(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
-
-    @Column(name = "created_at", updatable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-
-    @Column(name = "updated_at")
-    var updatedAt: LocalDateTime = LocalDateTime.now()
-)
+    val id: Long? = null
+) : BaseTimeEntity()
 
 enum class DeliveryStatus {
     READY, COMP, CANCEL

@@ -42,6 +42,11 @@
 - **Audit Logging:** 관리자의 주요 활동(회원 차단, 주문 강제 취소 등)은 별도의 감사 로그(Audit Log)로 기록하여 추적성을 확보합니다.
 - **AOP Implementation:** `@AuditLog` 어노테이션과 Aspect를 사용하여 비즈니스 로직 침투 없이 감사 로그를 남깁니다.
 
+### 3.4 Persistence Auditing
+- `created_at`, `updated_at`가 있는 주요 엔티티는 `BaseTimeEntity`를 상속하고 Spring Data JPA Auditing으로 시간을 자동 관리합니다.
+- `JpaAuditingConfig`에서 `@EnableJpaAuditing`을 활성화합니다.
+- `admin_audit_logs`는 감사 이벤트 전용 테이블이므로 `created_at`만 유지합니다.
+
 ## 4. Tech Components
 - **Web Server:** Tomcat (Spring Boot Embedded)
 - **Database:** MariaDB (`dev` / `qa` / `prod`), H2 (`test`)
