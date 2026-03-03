@@ -38,6 +38,15 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- **User Engagement Features:**
+  - `CartApiDelegateImpl`, `CartService`, `CartItem`/`CartItemRepository` 추가로 장바구니 담기/수정/삭제/조회 API 구현.
+  - `ReviewApiDelegateImpl`, `ReviewService`, `Review`/`ReviewRepository` 추가로 구매 사용자 리뷰 작성 및 공개 리뷰 목록 조회 API 구현.
+  - `WishlistApiDelegateImpl`, `WishlistService`, `Wishlist`/`WishlistRepository` 추가로 위시리스트 추가/삭제/조회 API 구현.
+  - `V4__create_phase7_tables.sql` 추가로 `cart_items`, `reviews`, `wishlists` 테이블 및 unique 제약 생성.
+  - `CartControllerTest`, `ReviewControllerTest`, `WishlistControllerTest` 추가로 Phase 7 API 검증 범위 확장.
+  - `openapi.yaml`에 Cart / Review / Wishlist 엔드포인트와 DTO 스키마 추가 및 OpenAPI 생성 코드 확장.
+- **Security:**
+  - `SecurityConfig`, `TestSecurityConfig`에서 `GET /api/v1/books/**`만 공개하고 리뷰 작성은 인증이 필요하도록 조정.
 - **Security & Administration:**
   - `AdminApiDelegateImpl`: 관리자 도서/회원/주문 관리 엔드포인트(`createBook`, `updateBook`, `deleteBook`, `deleteMember`, `cancelOrderAdmin`) 구현.
   - `AdminApiDelegateImpl`: `@PreAuthorize("hasRole('ADMIN')")` 및 `@AuditLog` 액션 확장 적용.
@@ -45,6 +54,8 @@ All notable changes to this project will be documented in this file.
   - `LoginTokenIssuer` 도입: `/members/login` 토큰 발급을 Keycloak 위임(`KeycloakLoginTokenIssuer`)으로 전환하고 테스트 전용 스텁(`TestLoginTokenIssuer`) 추가.
   - Keycloak 로컬 Realm/Client/User 구성 후 `verify-keycloak-e2e.ps1` 실행으로 실토큰 인증/권한 검증 통과.
 - **Documentation:**
+  - `.ai/03-rules.md`, `.ai/README.md`, `.ai/commands/sync-status.md`: 현재 활성 Phase만 `31-plan.md`/`32-todo.md`에서 관리하도록 문서 경계 규칙 강화.
+  - `30-roadmap.md` / `31-plan.md` / `32-todo.md`: `!sync` 기준으로 현재 활성 Phase를 `Phase 8 - Database & Environment Alignment`로 재정렬하고 세부 계획 재작성.
   - `docs/system-settings/keycloak-live-verification.md`: Keycloak 실토큰 기반 인증/인가 점검 절차 추가.
   - `docs/trouble-shootings/swagger-auth-flow.md`: Swagger/OpenAPI 노출 구조와 OAuth(PKCE) 처리 방식, 주요 장애 대응 절차 정리.
   - `docs/trouble-shootings/spring-boot-swagger-static-openapi-guide.md`: 타 Spring Boot 프로젝트에 재사용 가능한 Swagger 정적 OpenAPI 구성 가이드 추가.

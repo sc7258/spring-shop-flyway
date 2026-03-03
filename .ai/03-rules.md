@@ -13,6 +13,14 @@
 - **Auto Update:** 섹션 단위 작업이 완료되면, AI가 스스로 `32-todo.md`를 업데이트하고 결과를 요약하여 보고합니다.
 - **Stop Condition:** 중간에 심각한 에러가 발생하거나, 설계 변경이 필요한 경우에만 작업을 멈추고 사용자에게 질문합니다.
 
+### 2.1 Phase Document Boundary
+- **Single Active Phase:** `32-todo.md`는 **현재 활성 Phase 1개**의 미완료 작업만 관리합니다.
+- **No Future Tasks in Todo:** 다음 Phase, Future Works, Backlog, 아이디어 목록은 `32-todo.md`에 기록하지 않습니다.
+- **Roadmap Ownership:** 다음 Phase 이상의 작업과 우선순위는 반드시 `30-roadmap.md`에서 관리합니다.
+- **Plan Ownership:** 현재 Phase의 세부 실행 순서, 하위 체크리스트, 구현 단계는 `31-plan.md`에서 관리합니다.
+- **Phase Switch Protocol:** 활성 Phase가 바뀌면, AI는 먼저 `30-roadmap.md`의 순서를 반영한 뒤 `31-plan.md`와 `32-todo.md`를 새 Phase 기준으로 갱신합니다.
+- **Todo Cleanup Rule:** `32-todo.md`에는 항상 현재 Phase의 남은 작업만 남기고, 완료 항목은 `Done`으로 이동하거나 정리합니다.
+
 ## 3. 개발 워크플로우 (Development Workflow)
 우리는 **API First** 설계와 **TDD(Test Driven Development)** 방법론을 지향하며, 다음의 6단계 프로세스를 엄격히 준수합니다.
 

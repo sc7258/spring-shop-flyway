@@ -58,6 +58,36 @@
   - `details` (JSON Text, Arguments)
   - `created_at`
 
+### 2.6 Cart (장바구니)
+- **`cart_items`**
+  - `id` (PK)
+  - `member_id` (FK -> members.id)
+  - `book_id` (FK -> books.id)
+  - `quantity`
+  - `created_at`
+  - `updated_at`
+  - `unique(member_id, book_id)`로 사용자별 동일 도서 중복 행 방지
+
+### 2.7 Review (리뷰)
+- **`reviews`**
+  - `id` (PK)
+  - `member_id` (FK -> members.id)
+  - `book_id` (FK -> books.id)
+  - `rating` (1~5)
+  - `content`
+  - `created_at`
+  - `updated_at`
+  - `unique(member_id, book_id)`로 사용자별 도서당 1개 리뷰 제한
+
+### 2.8 Wishlist (위시리스트)
+- **`wishlists`**
+  - `id` (PK)
+  - `member_id` (FK -> members.id)
+  - `book_id` (FK -> books.id)
+  - `created_at`
+  - `updated_at`
+  - `unique(member_id, book_id)`로 중복 저장 방지
+
 ## 3. ER Diagram (Conceptual)
 ```mermaid
 erDiagram
@@ -66,4 +96,10 @@ erDiagram
     BOOK ||--o{ ORDER_ITEM : included_in
     ORDER ||--|| DELIVERY : has
     MEMBER ||--o{ ADMIN_AUDIT_LOG : performs
+    MEMBER ||--o{ CART_ITEM : owns
+    BOOK ||--o{ CART_ITEM : selected_in
+    MEMBER ||--o{ REVIEW : writes
+    BOOK ||--o{ REVIEW : receives
+    MEMBER ||--o{ WISHLIST : saves
+    BOOK ||--o{ WISHLIST : saved_as
 ```

@@ -23,5 +23,9 @@ enum class ErrorCode(
     ORDER_NOT_FOUND("O001", "Order Not Found", HttpStatus.NOT_FOUND),
 
     // Delivery
-    DELIVERY_NOT_FOUND("D001", "Delivery Not Found", HttpStatus.NOT_FOUND);
+    DELIVERY_NOT_FOUND("D001", "Delivery Not Found", HttpStatus.NOT_FOUND),
+
+    // Review
+    REVIEW_NOT_ALLOWED("R001", "Review Not Allowed", HttpStatus.FORBIDDEN),
+    REVIEW_ALREADY_EXISTS("R002", "Review Already Exists", HttpStatus.CONFLICT);
 }

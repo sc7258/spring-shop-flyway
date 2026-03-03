@@ -1,38 +1,36 @@
-# Phase 6 Implementation Plan: Security & Administration
+# Phase 8 Implementation Plan: Database & Environment Alignment
 
-**목표:** 인증 체계를 고도화하고, 관리자 기능을 추가하여 운영 효율성을 높인다.
-  
-## 1. Keycloak Integration
- ### 1.1 Infrastructure Setup
- - [x] **Docker Compose**: Keycloak 컨테이너 추가 (`postgres` 의존성 확인).
- - [x] **Realm Configuration**: `shop-realm` 생성 및 클라이언트 설정 (`spring-shop-app`).
- - [x] **User & Role Setup**: 테스트용 사용자 및 `ROLE_ADMIN`, `ROLE_USER` 생성.
+> Rule:
+> 이 문서는 현재 활성 Phase의 실행 계획만 관리합니다.
+> 다음 Phase 이상의 작업을 섞지 않습니다.
 
- ### 1.2 Spring Security Migration
- - [x] **Dependencies**: `spring-boot-starter-oauth2-resource-server` 추가.
- - [x] **Configuration**: `SecurityConfig`를 OAuth2 Resource Server 모드로 변경 (JWT Decoder 설정).
- - [x] **Token Provider Removal**: 기존 `JwtTokenProvider`, `JwtAuthenticationFilter` 제거 (또는 Deprecated 처리).
- - [x] **Migration Cleanup**: 레거시 JWT 로그인 발급 경로(`MemberService.login`)를 `LoginTokenIssuer` 기반(Keycloak 위임)으로 전환.
+**목표:** 사내 표준 환경에 맞춰 MariaDB 기반 데이터베이스 전략과 `dev` / `qa` / `prod` 실행 프로파일 구조를 정비한다.
+
+## 1. MariaDB Migration
+### 1.1 Dependency & Runtime Alignment
+- [ ] `build.gradle.kts`의 PostgreSQL 런타임 의존성을 MariaDB 기준으로 전환한다.
+- [ ] `docker-compose.yml`과 개발용 DB 실행 절차를 MariaDB 기준으로 정리한다.
+
+### 1.2 Configuration Update
+- [ ] `application.yml`의 기본 datasource / dialect / Flyway 설정을 MariaDB 기준으로 재구성한다.
+- [ ] 테스트 환경(H2 유지 여부 포함)과 운영 환경 간 차이를 명시한다.
 
 ### 1.3 Verification
-- [x] **Login Test**: Keycloak을 통해 발급받은 토큰으로 API 호출 성공 확인.
-- [x] **Role Test**: `ROLE_USER` 권한으로 일반 API 접근 확인.
+- [ ] Flyway 마이그레이션이 MariaDB에서 정상 적용되는지 검증한다.
+- [ ] 애플리케이션 기동 및 주요 통합 테스트가 MariaDB 전환 후에도 통과하는지 확인한다.
 
-## 2. Admin API
- ### 2.1 Role-Based Access Control (RBAC)
- - [x] **Security Config**: `/api/v1/admin/**` 경로는 `ROLE_ADMIN`만 접근 가능하도록 설정.
- - [x] **Annotation**: `@PreAuthorize("hasRole('ADMIN')")` 적용.
+## 2. Environment Profile Strategy
+### 2.1 Profile Structure
+- [ ] `local` 프로필을 제거한다.
+- [ ] `dev`, `qa`, `prod` 3단계 프로필로 재구성한다.
 
-### 2.2 Admin Features Implementation
- - [x] **User Management**: 전체 회원 목록 조회, 특정 회원 강제 탈퇴 API.
- - [x] **Book Management**: 도서 등록/수정/삭제 API를 Admin 전용으로 이동/보완.
- - [x] **Order Management**: 전체 주문 목록 조회, 주문 강제 취소 API.
+### 2.2 Environment-Specific Settings
+- [ ] 환경별 datasource, logging, security, swagger 노출 정책 차이를 정리한다.
+- [ ] 기본 활성 프로필과 배포 시 주입해야 하는 환경변수를 명확히 정의한다.
 
- ### 2.3 Audit Logging
- - [x] **Entity**: `AdminAuditLog` 엔티티 생성.
-- [x] **Service**: 관리자 액션 발생 시 로그 저장 로직 구현.
-- [x] **Aspect**: AOP를 활용하여 관리자 API 호출 시 자동으로 Audit Log 남기기.
+### 2.3 Verification
+- [ ] 각 프로필에서 필수 설정 누락 없이 기동 가능한지 점검한다.
 
-## 3. Final Verification
-- [x] **Integration Test**: 관리자 권한으로 API 호출 시나리오 테스트(`AdminControllerTest`).
-- [x] **Access Denied Test**: 일반 사용자가 관리자 API 접근 시 403 Forbidden 확인(`AdminControllerTest`).
+## 3. Documentation & Handoff
+- [ ] `README.md` 실행 가이드를 새 프로파일/DB 기준으로 갱신한다.
+- [ ] `01-tech-stack.md`, `20-architecture.md`, `21-database-schema.md`, `30-roadmap.md`, `32-todo.md`, `33-changelog.md`를 변경 내용에 맞게 동기화한다.

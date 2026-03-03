@@ -23,3 +23,9 @@ class OrderNotFoundException(message: String = ErrorCode.ORDER_NOT_FOUND.message
 
 class DeliveryNotFoundException(message: String = ErrorCode.DELIVERY_NOT_FOUND.message) : 
     BusinessException(ErrorCode.DELIVERY_NOT_FOUND, message)
+
+class ReviewNotAllowedException(message: String = ErrorCode.REVIEW_NOT_ALLOWED.message) :
+    BusinessException(ErrorCode.REVIEW_NOT_ALLOWED, message)
+
+class ReviewAlreadyExistsException(message: String = ErrorCode.REVIEW_ALREADY_EXISTS.message) :
+    BusinessException(ErrorCode.REVIEW_ALREADY_EXISTS, message)

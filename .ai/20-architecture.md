@@ -3,6 +3,7 @@
 ## 1. Architectural Style
 - **Layered Architecture:** Presentation -> Application -> Domain -> Infrastructure 계층 구조를 따릅니다.
 - **Modular Monolith:** 단일 배포 단위이지만, 내부적으로는 도메인별(Member, Catalog, Order, Delivery)로 모듈화하여 결합도를 낮춥니다.
+- **Phase 7 Extension:** 사용자 참여 기능은 `cart`, `review`, `wishlist` 모듈을 추가하여 기존 주문/카탈로그 도메인과 느슨하게 연결합니다.
 
 ## 2. Layer Description
 ### 2.1 Presentation Layer (`controller`, `dto`)
@@ -52,5 +53,8 @@ com.sc7258.shop
 ├── member          // 회원 도메인
 ├── catalog         // 도서/재고 도메인
 ├── order           // 주문/결제 도메인
-└── delivery        // 배송 도메인
+├── delivery        // 배송 도메인
+├── cart            // 장바구니 도메인
+├── review          // 리뷰 도메인
+└── wishlist        // 위시리스트 도메인
 ```

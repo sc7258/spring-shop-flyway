@@ -44,6 +44,17 @@
 *   **State Sync**: `31-plan.md`를 읽어 현재 작업의 위치와 다음 단계를 확인한다.
 *   **Consistency**: 제안하는 코드가 정의된 API 명세(예: `api-spec.yaml` 등)를 위반하지 않는지 대조한다.
 
+### Document Ownership
+- **`30-roadmap.md`**: 전체 Phase 순서, 미래 계획, 중장기 우선순위를 관리합니다.
+- **`31-plan.md`**: 현재 활성 Phase의 실행 계획과 세부 체크리스트를 관리합니다.
+- **`32-todo.md`**: 현재 활성 Phase의 남은 작업만 관리합니다.
+- **`33-changelog.md`**: 완료된 변경 사항을 누적 기록합니다.
+
+### Boundary Rule
+- `32-todo.md`에는 현재 Phase 외의 항목을 넣지 않습니다.
+- 다음 Phase 이상의 항목은 `30-roadmap.md`에서만 관리합니다.
+- 활성 Phase가 변경되면 `31-plan.md`와 `32-todo.md`도 함께 새 Phase 기준으로 갱신합니다.
+
 ### 2. 증강 코딩 워크플로우 (Augmented Workflow)
 본 프로젝트는 Kent Beck의 방식을 따라 **'생각의 동기화'**를 중시합니다.
 
