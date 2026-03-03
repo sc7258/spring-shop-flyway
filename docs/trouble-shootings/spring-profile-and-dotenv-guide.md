@@ -44,6 +44,21 @@ Spring Boot는 기본적으로 다음 순서로 설정을 읽습니다.
 
 즉 파일명 `.env` 자체는 현재 사용하지 않습니다.
 
+프로필 판별 순서는 아래와 같습니다.
+
+1. command-line args의 `--spring.profiles.active`
+2. JVM system property의 `spring.profiles.active`
+3. OS environment variable의 `SPRING_PROFILES_ACTIVE`
+4. 없으면 기본값 `dev`
+
+즉 아래처럼 실행하면 `.env.qa`를 읽습니다.
+
+```bash
+./gradlew bootRun --args='--spring.profiles.active=qa'
+```
+
+프로필을 아예 지정하지 않으면 `dev`로 간주하고 `.env.dev`를 읽습니다.
+
 ## 3. 프로필별 실제 조합
 
 ### 3.1 `dev`
@@ -59,6 +74,10 @@ Spring Boot는 기본적으로 다음 순서로 설정을 읽습니다.
 - `application.yml`: 공통 설정
 - `application-dev.yml`: Dev용 datasource, JPA dialect, Keycloak 주소
 - `.env.dev`: 민감값 또는 환경별 세부 변수 (`DB_USERNAME`, `DB_PASSWORD`, `KEYCLOAK_CLIENT_SECRET` 등)
+
+참고:
+
+- 프로필을 지정하지 않고 실행하면 이 조합이 기본으로 적용됩니다.
 
 ### 3.2 `qa`
 
@@ -190,16 +209,23 @@ jdbc:mariadb://10.10.10.20:3306/TEST_SAMPLE_DB
 
 이 프로젝트에서 실무적으로 이해하면 아래 순서로 보면 됩니다.
 
-1. JVM system property / OS environment variable
+1. command-line args의 `--spring.profiles.active`로 결정된 활성 프로필
 2. `.env.{profile}`에서 애플리케이션 시작 시 주입한 system property
-3. `application-{profile}.yml`
-4. `application.yml`
-5. `${VAR:default}`의 기본값
+3. JVM system property / OS environment variable
+4. `application-{profile}.yml`
+5. `application.yml`
+6. `${VAR:default}`의 기본값
 
 중요한 점:
 
 - `.env.*` 값은 `SpringShopFlywayApplication.kt`에서 `System.setProperty(...)`로 주입되므로 Spring 입장에서는 system property처럼 동작합니다.
 - 따라서 `.env.*` 값이 있으면 `application-*.yml` 안 `${...}` placeholder가 그 값을 사용합니다.
+- 같은 키가 OS 환경변수에도 있고 `.env.*`에도 있으면, 현재 구현에서는 `.env.*`가 주입한 값이 최종적으로 사용됩니다.
+
+주의:
+
+- 여기서 1번은 "어떤 `.env` 파일을 읽을지"를 정하는 규칙입니다.
+- 실제 설정값 해석에서는 `.env.*`가 `System.setProperty(...)`로 들어가므로 OS 환경변수보다 강하게 동작합니다.
 
 ## 7. 왜 `.env`와 `.env.local`을 쓰지 않는가
 
@@ -244,6 +270,21 @@ jdbc:mariadb://10.10.10.20:3306/TEST_SAMPLE_DB
 
 - `.env`는 안 씀
 - `.env.dev`, `.env.qa`, `.env.prod`는 씀
+
+### 8.4 다중 프로필을 주면 어떻게 되는가?
+
+예:
+
+```bash
+./gradlew bootRun --args='--spring.profiles.active=qa,feature-x'
+```
+
+현재 구현은 첫 번째 프로필만 보고 `.env` 파일을 결정합니다.
+
+- 활성 프로필 해석의 기준값: `qa`
+- 읽는 dotenv 파일: `.env.qa`
+
+즉 Spring은 여러 프로필을 활성화할 수 있어도, dotenv 파일 선택은 첫 번째 프로필 기준으로만 동작합니다.
 
 ## 9. 권장 운영 방식
 
