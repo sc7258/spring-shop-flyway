@@ -9,7 +9,6 @@ import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -30,31 +29,23 @@ class SecurityConfig(
     }
 
     @Bean
-    fun webSecurityCustomizer(): WebSecurityCustomizer {
-        return WebSecurityCustomizer { web ->
-            web.ignoring().requestMatchers(
-                "/h2-console/**",
-                "/favicon.ico",
-                "/error",
-                "/swagger-ui/**",
-                "/swagger-ui.html",
-                "/swagger-resources/**",
-                "/v3/api-docs/**",
-                "/api/v1/swagger-ui/**",
-                "/api/v1/swagger-ui.html",
-                "/api/v1/openapi.yaml",
-                "/actuator/**"
-            )
-        }
-    }
-
-    @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
                 it.requestMatchers(
+                    "/h2-console/**",
+                    "/favicon.ico",
+                    "/error",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html",
+                    "/swagger-resources/**",
+                    "/v3/api-docs/**",
+                    "/api/v1/swagger-ui/**",
+                    "/api/v1/swagger-ui.html",
+                    "/api/v1/openapi.yaml",
+                    "/actuator/**",
                     "/api/v1/members/signup",
                     "/api/v1/members/login"
                 ).permitAll()

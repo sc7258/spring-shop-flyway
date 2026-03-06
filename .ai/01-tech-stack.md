@@ -7,6 +7,7 @@
 ## Frameworks & Libraries
 - **Spring Boot:** 3.5.10
 - **Spring Data JPA:** For ORM and database access
+- **Spring Boot Starter jOOQ:** For type-safe SQL query execution
 - **Spring Web:** For building RESTful web services
 - **Jackson:** For JSON processing (jackson-module-kotlin)
 - **SpringDoc / Swagger UI:** API documentation visualization
@@ -15,11 +16,13 @@
 - **H2:** Runtime dependency (likely for local development/testing)
 - **MariaDB:** Runtime dependency for `dev` / `qa` / `prod`
 - **Flyway:** Database migration tool
-- **jOOQ:** (Planned) For Type-safe SQL & Dynamic Query
+- **jOOQ 3.19.x:** For type-safe SQL & dynamic query
+- **jOOQ DDLDatabase:** Generates code from Flyway SQL scripts without requiring a live database during codegen
 
 ## Build Tool
 - **Gradle:** Kotlin DSL (build.gradle.kts)
 - **OpenAPI Generator:** Code generation from OpenAPI spec (Gradle Plugin)
+- **jOOQ Codegen Plugin:** Generates Kotlin DSL metadata into `build/generated-src/jooq/main`
 
 ## Environment Configuration
 - **Spring Profiles:** `dev`, `qa`, `prod`, `test`

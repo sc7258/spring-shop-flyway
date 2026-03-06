@@ -42,6 +42,24 @@ class CatalogControllerTest {
                 isbn = "1234567890"
             )
         )
+        bookRepository.save(
+            Book(
+                title = "Kotlin in Action",
+                author = "Dmitry Jemerov",
+                price = 32000,
+                stockQuantity = 50,
+                isbn = "1234567891"
+            )
+        )
+        bookRepository.save(
+            Book(
+                title = "spring data recipes",
+                author = "Data Team",
+                price = 28000,
+                stockQuantity = 75,
+                isbn = "1234567892"
+            )
+        )
     }
 
     @Test
@@ -54,7 +72,8 @@ class CatalogControllerTest {
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.content").isArray)
-            .andExpect(jsonPath("$.totalElements").value(1))
+            .andExpect(jsonPath("$.totalElements").value(3))
+            .andExpect(jsonPath("$.content[0].title").value("spring data recipes"))
     }
 
     @Test
@@ -65,7 +84,23 @@ class CatalogControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.content[0].title").value("Spring Boot in Action"))
+            .andExpect(jsonPath("$.totalElements").value(2))
+            .andExpect(jsonPath("$.content[0].title").value("spring data recipes"))
+            .andExpect(jsonPath("$.content[1].title").value("Spring Boot in Action"))
+    }
+
+    @Test
+    fun `도서 목록을 페이지 단위로 조회한다`() {
+        mockMvc.perform(
+            get("/api/v1/books")
+                .param("page", "1")
+                .param("size", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.totalElements").value(3))
+            .andExpect(jsonPath("$.totalPages").value(3))
+            .andExpect(jsonPath("$.content[0].title").value("Kotlin in Action"))
     }
 
     @Test

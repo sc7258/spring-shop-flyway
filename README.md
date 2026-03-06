@@ -38,6 +38,15 @@
 ```
 실행 가능한 jar 파일은 `build/libs/` 경로에 생성됩니다.
 
+### jOOQ 코드 생성
+Flyway 마이그레이션 스크립트를 기준으로 jOOQ 메타모델을 다시 생성하려면 다음 명령어를 사용합니다:
+```bash
+./gradlew jooqCodegen
+```
+- 생성 경로: `build/generated-src/jooq/main`
+- 생성 패키지: `com.sc7258.springshopflyway.jooq.generated`
+- `compileKotlin` 실행 시 `jooqCodegen`도 함께 수행됩니다.
+
 ### 테스트 실행 (Test)
 `build` 외에도 테스트만 별도로 실행할 수 있습니다.
 

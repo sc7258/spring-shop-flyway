@@ -8,7 +8,6 @@ import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -29,23 +28,15 @@ class TestSecurityConfig {
     }
 
     @Bean
-    fun webSecurityCustomizer(): WebSecurityCustomizer {
-        return WebSecurityCustomizer { web ->
-            web.ignoring().requestMatchers(
-                "/h2-console/**",
-                "/favicon.ico",
-                "/error"
-            )
-        }
-    }
-
-    @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
                 it.requestMatchers(
+                    "/h2-console/**",
+                    "/favicon.ico",
+                    "/error",
                     "/api/v1/members/signup",
                     "/api/v1/members/login"
                 ).permitAll()

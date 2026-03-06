@@ -38,6 +38,12 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- **Performance & Optimization:**
+  - `build.gradle.kts`에 `spring-boot-starter-jooq`, `org.jooq.jooq-codegen-gradle`, `jooqCodegen` classpath를 추가해 Java 17 호환 jOOQ 3.19.x 코드 생성 환경을 구성.
+  - Flyway 마이그레이션(`src/main/resources/db/migration/*.sql`)을 기준으로 jOOQ 메타모델을 생성하도록 DDLDatabase 설정 추가.
+  - jOOQ 생성 코드를 `build/generated-src/jooq/main` / `com.sc7258.springshopflyway.jooq.generated`로 분리하고 `compileKotlin`에 코드 생성 태스크를 연결.
+  - `BookCatalogQueryRepository`를 추가해 Catalog 목록/키워드 검색/페이징 조회를 jOOQ 기반으로 전환.
+  - `CatalogControllerTest`에 정렬/검색/페이징 검증 케이스를 보강해 jOOQ 전환 이후 동작을 검증.
 - **User Engagement Features:**
   - `CartApiDelegateImpl`, `CartService`, `CartItem`/`CartItemRepository` 추가로 장바구니 담기/수정/삭제/조회 API 구현.
   - `ReviewApiDelegateImpl`, `ReviewService`, `Review`/`ReviewRepository` 추가로 구매 사용자 리뷰 작성 및 공개 리뷰 목록 조회 API 구현.
@@ -60,6 +66,7 @@ All notable changes to this project will be documented in this file.
   - `LoginTokenIssuer` 도입: `/members/login` 토큰 발급을 Keycloak 위임(`KeycloakLoginTokenIssuer`)으로 전환하고 테스트 전용 스텁(`TestLoginTokenIssuer`) 추가.
   - Keycloak 로컬 Realm/Client/User 구성 후 `verify-keycloak-e2e.ps1` 실행으로 실토큰 인증/권한 검증 통과.
 - **Documentation:**
+  - `README.md`, `.ai/01-tech-stack.md`, `.ai/20-architecture.md`, `.ai/30-roadmap.md`, `.ai/31-plan.md`, `.ai/32-todo.md`: jOOQ 코드 생성 경로, 패키지, Phase 9 진행 상태를 반영.
   - `.ai/03-rules.md`, `.ai/README.md`, `.ai/commands/sync-status.md`: 현재 활성 Phase만 `31-plan.md`/`32-todo.md`에서 관리하도록 문서 경계 규칙 강화.
   - `30-roadmap.md` / `31-plan.md` / `32-todo.md`: `!sync` 기준으로 현재 활성 Phase를 `Phase 8 - Database & Environment Alignment`로 재정렬하고 세부 계획 재작성.
   - `README.md`, `docs/system-settings/README.md`, `docs/system-settings/mariadb-dev-setup.md`: MariaDB 기반 `dev` 실행 가이드와 `.env.local` 주의사항 반영.
@@ -107,6 +114,10 @@ All notable changes to this project will be documented in this file.
   - `V2__insert_sample_books.sql`: 초기 샘플 도서 데이터(5권) 추가.
   - `CatalogIntegrationTest`: 도서 목록 및 상세 조회 통합 테스트 작성.
 - **Refactoring:**
+  - `SecurityConfig`, `TestSecurityConfig`에서 `WebSecurityCustomizer#ignoring` 사용을 제거하고 `authorizeHttpRequests(...).permitAll()`로 정리해 Spring Security 권장 방식으로 전환.
+  - `WebConfig`에 `/swagger-ui.html`, `/swagger-ui/index.html` -> `/api/v1/swagger-ui...` 리다이렉트를 추가해 구형 Swagger 경로 접근 시 `No static resource swagger-ui/index.html` 오류를 방지.
+  - `CatalogService.getBooks`의 조회 경로를 JPA Page 기반 구현에서 jOOQ 기반 구현으로 전환.
+  - JPA 쓰기와 jOOQ 읽기를 동일 트랜잭션에서 사용할 때 결과가 어긋나지 않도록 `BookCatalogQueryRepository`에 flush 경계를 추가.
   - `MemberService`: `JwtTokenProvider` 의존 제거, `LoginTokenIssuer` 기반으로 로그인 흐름 전환.
   - 레거시 JWT 구성 정리: `JwtTokenProvider`, `JwtAuthenticationFilter`, `CustomUserDetailsService` 삭제 및 `jjwt` 의존성 제거.
   - `SecurityConfig`: Keycloak 토큰의 principal claim을 `preferred_username`으로 고정.

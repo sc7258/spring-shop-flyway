@@ -24,6 +24,9 @@
 - DB 구현체(JpaRepository), 외부 API 호출, 메시징 시스템 등 실제 기술적인 구현을 담당합니다.
 - 런타임 프로파일은 `dev`, `qa`, `prod` 3단계로 운영하며, `test`는 별도 검증용 프로파일로 유지합니다.
 - 프로파일별 추가 환경변수는 `dev -> .env.dev`, `qa -> .env.qa`, `prod -> .env.prod`로 로드하고 `test`는 `.env`를 로드하지 않습니다.
+- 동적 조회가 필요한 구간은 JPA와 병행하여 jOOQ를 사용할 수 있으며, 생성 코드는 `build/generated-src/jooq/main` 아래 `com.sc7258.springshopflyway.jooq.generated` 패키지로 분리합니다.
+- jOOQ 메타모델은 라이브 DB가 아닌 Flyway 마이그레이션 스크립트(`src/main/resources/db/migration`)를 기준으로 생성합니다.
+- JPA 쓰기 직후 동일 트랜잭션에서 jOOQ 읽기를 수행하는 경우, flush 경계를 명시해 두 기술 간 조회 일관성을 보장합니다.
 
 ## 3. Cross-Cutting Concerns (공통 관심사)
 ### 3.1 Exception Handling
@@ -51,17 +54,16 @@
 - **Web Server:** Tomcat (Spring Boot Embedded)
 - **Database:** MariaDB (`dev` / `qa` / `prod`), H2 (`test`)
 - **Migration:** Flyway (DB 스키마 버전 관리)
+- **Query Stack:** Spring Data JPA + jOOQ 병행 전략
 - **Security:** Spring Security OAuth2 Resource Server (Keycloak JWT Role Mapping)
 
 ## 5. Package Structure
 ```
-com.sc7258.shop
-├── common          // 공통 유틸리티, 예외 처리
-├── member          // 회원 도메인
-├── catalog         // 도서/재고 도메인
-├── order           // 주문/결제 도메인
-├── delivery        // 배송 도메인
-├── cart            // 장바구니 도메인
-├── review          // 리뷰 도메인
-└── wishlist        // 위시리스트 도메인
+com.sc7258.springshopflyway
+├── api             // OpenAPI delegate 구현 및 API 진입점
+├── common          // 공통 유틸리티, 예외 처리, 보안, 감사
+├── config          // Spring 설정
+├── domain          // 도메인 엔티티 및 리포지토리
+├── service         // 유스케이스 및 비즈니스 서비스
+└── jooq.generated  // build/generated-src/jooq/main 에 생성되는 jOOQ 메타모델
 ```

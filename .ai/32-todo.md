@@ -8,8 +8,8 @@
 ## Current Phase: Phase 9 - Performance & Optimization
 
 ### 1. jOOQ Integration
-- [ ] jOOQ 설정 및 코드 생성 환경 구축
-- [ ] 복잡한 조회 쿼리(Catalog 검색 등)를 jOOQ로 리팩토링
+- [x] jOOQ 설정 및 코드 생성 환경 구축
+- [x] 복잡한 조회 쿼리(Catalog 검색 등)를 jOOQ로 리팩토링
 
 ### 2. Performance Tuning
 - [ ] N+1 문제 해결 및 인덱싱 최적화
