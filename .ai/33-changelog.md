@@ -44,6 +44,14 @@ All notable changes to this project will be documented in this file.
   - jOOQ 생성 코드를 `build/generated-src/jooq/main` / `com.sc7258.springshopflyway.jooq.generated`로 분리하고 `compileKotlin`에 코드 생성 태스크를 연결.
   - `BookCatalogQueryRepository`를 추가해 Catalog 목록/키워드 검색/페이징 조회를 jOOQ 기반으로 전환.
   - `CatalogControllerTest`에 정렬/검색/페이징 검증 케이스를 보강해 jOOQ 전환 이후 동작을 검증.
+  - `CartItemRepository`, `WishlistRepository`, `ReviewRepository` 조회 메서드에 `@EntityGraph`를 적용해 N+1 조회를 완화.
+  - `V5__add_phase9_performance_indexes.sql`로 Cart/Wishlist/Review/Order 조회 경로 복합 인덱스를 추가.
+  - `QueryPerformanceIntegrationTest`를 추가해 쿼리 수 전/후 비교를 자동 검증 (Cart 4->1, Wishlist 4->1, Review 4->2).
+- **Member API:**
+  - OpenAPI에 `GET /members/me`, `PUT /members/me` 추가.
+  - `MemberService`에 내 정보 조회/수정 유스케이스(`getMyProfile`, `updateMyProfile`) 추가.
+  - `MemberApiDelegateImpl`에 인증 사용자 기준 프로필 조회/수정 엔드포인트 구현.
+  - `MemberControllerTest`에 내 정보 조회/수정 및 비인증 접근 차단 테스트 추가.
 - **User Engagement Features:**
   - `CartApiDelegateImpl`, `CartService`, `CartItem`/`CartItemRepository` 추가로 장바구니 담기/수정/삭제/조회 API 구현.
   - `ReviewApiDelegateImpl`, `ReviewService`, `Review`/`ReviewRepository` 추가로 구매 사용자 리뷰 작성 및 공개 리뷰 목록 조회 API 구현.
@@ -66,6 +74,8 @@ All notable changes to this project will be documented in this file.
   - `LoginTokenIssuer` 도입: `/members/login` 토큰 발급을 Keycloak 위임(`KeycloakLoginTokenIssuer`)으로 전환하고 테스트 전용 스텁(`TestLoginTokenIssuer`) 추가.
   - Keycloak 로컬 Realm/Client/User 구성 후 `verify-keycloak-e2e.ps1` 실행으로 실토큰 인증/권한 검증 통과.
 - **Documentation:**
+  - `docs/trouble-shootings/phase9-performance-tuning-report.md`를 추가해 성능 시나리오, SLO, 쿼리 수 전/후 비교 결과를 문서화.
+  - `openapi/openapi.yaml`, `README.md`, `.ai/10-prd.md`, `.ai/11-user-stories.md`, `.ai/21-database-schema.md`, `.ai/22-api-spec.md`를 최신 API/성능 기준으로 갱신.
   - `README.md`, `.ai/01-tech-stack.md`, `.ai/20-architecture.md`, `.ai/30-roadmap.md`, `.ai/31-plan.md`, `.ai/32-todo.md`: jOOQ 코드 생성 경로, 패키지, Phase 9 진행 상태를 반영.
   - `.ai/03-rules.md`, `.ai/README.md`, `.ai/commands/sync-status.md`: 현재 활성 Phase만 `31-plan.md`/`32-todo.md`에서 관리하도록 문서 경계 규칙 강화.
   - `30-roadmap.md` / `31-plan.md` / `32-todo.md`: `!sync` 기준으로 현재 활성 Phase를 `Phase 8 - Database & Environment Alignment`로 재정렬하고 세부 계획 재작성.

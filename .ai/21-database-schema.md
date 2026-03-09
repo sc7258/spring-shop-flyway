@@ -90,7 +90,15 @@
   - `updated_at`
   - `unique(member_id, book_id)`로 중복 저장 방지
 
-## 3. ER Diagram (Conceptual)
+## 3. Performance Indexes (Phase 9)
+- `idx_cart_items_member_created_at` on `cart_items(member_id, created_at)`
+- `idx_wishlists_member_created_at` on `wishlists(member_id, created_at)`
+- `idx_reviews_book_created_at` on `reviews(book_id, created_at)`
+- `idx_orders_member_ordered_at` on `orders(member_id, ordered_at)`
+- `idx_orders_member_status_id` on `orders(member_id, status, id)`
+- `idx_order_items_book_order` on `order_items(book_id, order_id)`
+
+## 4. ER Diagram (Conceptual)
 ```mermaid
 erDiagram
     MEMBER ||--o{ ORDER : places

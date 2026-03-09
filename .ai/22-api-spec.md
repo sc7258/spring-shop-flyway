@@ -42,6 +42,36 @@
   {
     "accessToken": "eyJhbGciOiJIUz..."
   }
+
+### 2.3 내 정보 조회
+- **GET** `/members/me`
+- **Header:** `Authorization: Bearer {token}`
+- **Response:** `200 OK`
+  ```json
+  {
+    "id": 1,
+    "email": "user@example.com",
+    "name": "John Doe",
+    "role": "USER",
+    "city": "Seoul",
+    "street": "Gangnam-gu",
+    "zipcode": "12345"
+  }
+  ```
+
+### 2.4 내 정보 수정
+- **PUT** `/members/me`
+- **Header:** `Authorization: Bearer {token}`
+- **Request:**
+  ```json
+  {
+    "name": "John Doe Updated",
+    "city": "Seoul",
+    "street": "Gangnam-daero",
+    "zipcode": "06236"
+  }
+  ```
+- **Response:** `200 OK` (`MemberProfileResponse`)
   ```
 
 ## 3. Catalog API

@@ -50,6 +50,11 @@
 - `JpaAuditingConfig`에서 `@EnableJpaAuditing`을 활성화합니다.
 - `admin_audit_logs`는 감사 이벤트 전용 테이블이므로 `created_at`만 유지합니다.
 
+### 3.5 Performance Tuning (Phase 9)
+- Cart / Wishlist / Review 조회 경로의 N+1 완화를 위해 Repository 조회 메서드에 `@EntityGraph`를 적용합니다.
+- 성능 회귀 방지를 위해 Hibernate Statistics 기반 쿼리 수 비교 테스트(`QueryPerformanceIntegrationTest`)를 운영합니다.
+- 인덱스 최적화는 Flyway 마이그레이션(`V5__add_phase9_performance_indexes.sql`)으로 관리합니다.
+
 ## 4. Tech Components
 - **Web Server:** Tomcat (Spring Boot Embedded)
 - **Database:** MariaDB (`dev` / `qa` / `prod`), H2 (`test`)

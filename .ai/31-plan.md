@@ -21,13 +21,13 @@
 
 ## 2. Performance Tuning
 ### 2.1 Data Access Optimization
-- [ ] N+1 문제를 점검하고 fetch 전략 또는 쿼리 구조를 개선한다.
-- [ ] 주요 검색/조회 경로에 필요한 인덱스를 정리한다.
+- [x] N+1 문제를 점검하고 Cart / Wishlist / Review 조회에 `@EntityGraph` 기반 최적화를 적용한다.
+- [x] `V5__add_phase9_performance_indexes.sql`로 주요 검색/조회 경로 인덱스를 반영한다.
 
 ### 2.2 Verification
-- [ ] 성능 테스트 시나리오를 정의하고 기준 응답시간을 설정한다.
-- [ ] 병목 지점 개선 전후를 비교해 문서화한다.
+- [x] 성능 테스트 시나리오를 정의하고 기준 응답시간(SLO)을 설정한다.
+- [x] Hibernate Statistics 기반 쿼리 수 비교(전/후)를 수행하고 결과를 문서화한다.
 
 ## 3. Documentation & Handoff
 - [x] Catalog 조회 이전 결과와 jOOQ 운용 규칙을 `20-architecture.md`, `30-roadmap.md`, `32-todo.md`, `33-changelog.md`에 반영한다.
-- [ ] 다음 성능 작업(N+1, 인덱스) 결과에 맞춰 `21-database-schema.md`, `33-changelog.md`를 추가 갱신한다.
+- [x] 성능 작업(N+1, 인덱스, 검증) 결과를 `21-database-schema.md`, `33-changelog.md`, `docs/trouble-shootings/phase9-performance-tuning-report.md`에 반영한다.

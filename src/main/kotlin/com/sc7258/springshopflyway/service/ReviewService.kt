@@ -62,7 +62,7 @@ class ReviewService(
         return reviewRepository.findAllByBookIdOrderByCreatedAtDesc(bookId).map { review ->
             ReviewResponse(
                 id = review.id,
-                bookId = review.book.id,
+                bookId = bookId,
                 memberName = review.member.name,
                 rating = review.rating,
                 content = review.content,

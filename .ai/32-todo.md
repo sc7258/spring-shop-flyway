@@ -7,16 +7,15 @@
 
 ## Current Phase: Phase 9 - Performance & Optimization
 
-### 1. jOOQ Integration
-- [x] jOOQ 설정 및 코드 생성 환경 구축
-- [x] 복잡한 조회 쿼리(Catalog 검색 등)를 jOOQ로 리팩토링
-
-### 2. Performance Tuning
-- [ ] N+1 문제 해결 및 인덱싱 최적화
-- [ ] 성능 테스트 수행 및 병목 지점 개선
+- 남은 작업 없음
 
 ---
 ## Done
+- [x] **Phase 9 - Performance & Optimization**
+  - **jOOQ Integration**: 코드 생성 환경 및 Catalog 조회 리팩토링 완료.
+  - **N+1 Optimization**: Cart / Wishlist / Review 조회 경로를 `@EntityGraph`로 최적화.
+  - **Indexing**: `V5__add_phase9_performance_indexes.sql`로 주요 조회 인덱스 반영.
+  - **Verification**: `QueryPerformanceIntegrationTest`에서 쿼리 수 전/후 비교 검증 (Cart 4->1, Wishlist 4->1, Review 4->2).
 - [x] **Phase 8 - Database & Environment Alignment**
   - **MariaDB Migration**: Gradle 의존성, Flyway 확장, Docker Compose, 실행 가이드를 MariaDB 기준으로 전환.
   - **Profiles**: `local` 제거 후 `dev` / `qa` / `prod` / `test` 구조로 재구성.

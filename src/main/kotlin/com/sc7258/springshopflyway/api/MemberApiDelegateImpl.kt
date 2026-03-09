@@ -2,9 +2,12 @@ package com.sc7258.springshopflyway.api
 
 import com.sc7258.springshopflyway.model.LoginRequest
 import com.sc7258.springshopflyway.model.LoginResponse
+import com.sc7258.springshopflyway.model.MemberProfileResponse
 import com.sc7258.springshopflyway.model.SignupRequest
+import com.sc7258.springshopflyway.model.UpdateMyProfileRequest
 import com.sc7258.springshopflyway.service.MemberService
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.net.URI
 
@@ -22,4 +25,16 @@ class MemberApiDelegateImpl(
         val token = memberService.login(loginRequest)
         return ResponseEntity.ok(LoginResponse(accessToken = token))
     }
+
+    override fun getMyProfile(): ResponseEntity<MemberProfileResponse> {
+        val profile = memberService.getMyProfile(getCurrentUserEmail())
+        return ResponseEntity.ok(profile)
+    }
+
+    override fun updateMyProfile(updateMyProfileRequest: UpdateMyProfileRequest): ResponseEntity<MemberProfileResponse> {
+        val profile = memberService.updateMyProfile(getCurrentUserEmail(), updateMyProfileRequest)
+        return ResponseEntity.ok(profile)
+    }
+
+    private fun getCurrentUserEmail(): String = SecurityContextHolder.getContext().authentication.name
 }

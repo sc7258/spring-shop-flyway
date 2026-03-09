@@ -13,14 +13,14 @@ class Member(
     val password: String,
 
     @Column(nullable = false)
-    val name: String,
+    var name: String,
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     val role: Role = Role.USER,
 
     @Embedded
-    val address: Address? = null,
+    var address: Address? = null,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

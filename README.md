@@ -104,7 +104,9 @@ java -jar build/libs/spring-shop-flyway-0.2.0.jar --spring.profiles.active=dev
 
 ### API 문서 (API Documentation)
 - Swagger UI: [http://localhost:8080/api/v1/swagger-ui.html](http://localhost:8080/api/v1/swagger-ui.html)
+- Member Self API: `GET /api/v1/members/me`, `PUT /api/v1/members/me` (인증 필요)
 - Swagger 처리 방식/트러블슈팅: `docs/trouble-shootings/swagger-auth-flow.md`
 - Spring Boot 공통 설정 가이드: `docs/trouble-shootings/spring-boot-swagger-static-openapi-guide.md`
 - OpenAPI 에러/예외 처리 공통 가이드: `docs/trouble-shootings/openapi-error-and-exception-handling-guide.md`
 - 오류 사전 나열 템플릿: `docs/trouble-shootings/error-catalog-and-matrix-template.md`
+- Phase 9 성능 최적화 리포트: `docs/trouble-shootings/phase9-performance-tuning-report.md`
